@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'f2kens',
-    'frontend_token'
+    'frontend_token',
+    'controlAsistencia'
 ]
 
 MIDDLEWARE = [
