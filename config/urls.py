@@ -15,8 +15,12 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+<<<<<<< HEAD
 #Import views from f2kens app
 from f2kens.views import *
+=======
+from frontend_token.views import *
+>>>>>>> remotes/origin/ui/ux
 
 #TODO: Testear urls
 #TODO: Documentar
@@ -76,4 +80,7 @@ urlpatterns = [
     url(r'^c-AuxCourse/', createAuxiliarCourse, name="create_auxCourse"),
     url(r'^u-AuxCourse/', updateAuxiliarCourse, name="update_auxCourse"),
     url(r'^d-AuxCourse/', deleteAuxiliarCourse, name="delete_auxCourse")
+
+    #Index
+    url(r'^$', index)
 ]

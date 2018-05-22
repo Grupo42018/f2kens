@@ -1,0 +1,74 @@
+body {
+	font-family: Arial, Helvetica, sans-serif;
+	background-color: powderblue;
+	background-image: url("/static/img/97229.jpg");
+	background-position: center;
+	background-attachment: fixed;
+}
+
+form {
+	border: 5px solid #ffffff50;
+	border-radius: 20px 20px 20px 20px;
+}
+
+form{
+	margin-top: 70px;
+	margin-left: 450px;
+	margin-right: 450px;
+	margin-bottom: 50px;
+
+}
+
+#avatar{
+	font-size:60px;
+	color: #ffffff90;
+}
+
+.label{
+	color: #ffffff90; 
+}
+
+.input{
+	border-radius: 10px 10px 10px 10px;
+}
+
+input[type=text], input[type=password] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+button {
+    background-color: #ffffff90;
+    color: #5981D7;
+    font-size: 20px;
+    border-radius: 12px 12px 12px 12px;
+    padding: 14px 20px;
+    margin: 15px 150px;
+    border: none;
+    cursor: pointer;
+    width: 25%;
+}
+
+button:hover {
+    opacity: 0.8;
+}
+
+.imgcontainer {
+    text-align: center;
+    margin: 24px 0 12px 0;
+}
+
+
+.avatar {
+    width: 40%;
+    border-radius: 50%;
+}
+
+.container {
+    padding: 16px;
+}
+
