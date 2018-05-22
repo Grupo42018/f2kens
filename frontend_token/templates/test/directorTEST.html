@@ -5,8 +5,32 @@
         <title>Director TEST</title>
     </head>
     <body>
-        <h1>DIRECTOR - TESTING VIEWS AND TEMPLATES</h1>
+        <center><h1>DIRECTOR - TESTING VIEWS AND TEMPLATES</h1></center>
 
         <!-- Creating a device -->
+        <div style="border-style:solid; padding-left: 20px">
+            <h3>Crear dispositivo</h3>
+            <form method="POST" action="/">
+                {% csrf_token %}
+                <p>Token</p>
+                <input type="text" name="device_token">
+                <input type="submit">
+            </form>
+        </div>
+        <br>
+        <!-- Creating a preceptor -->
+        <div style="border-style:solid; padding-left: 20px">
+            <h3>Crear preceptor</h3>
+            <form method="POST" action="/">
+                {% csrf_token %}
+                <p>Nombre</p>
+                <input type="text" name="preceptor_firstname">
+                <p>Apellido</p>
+                <input type="text" name="preceptor_lastname">
+                <p>Horario</p>
+                <input type="date" name="preceptor_schedule">
+                <input type="submit">
+            </form>
+        </div>
     </body>
 </html>
