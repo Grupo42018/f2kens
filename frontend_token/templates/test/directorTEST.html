@@ -1,0 +1,36 @@
+<!-- HTML BASICO PARA TESTEAR VIEWS EN CASO DE NO ESTAR DISPONIBLE ALGUN TEMPLATE -->
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Director TEST</title>
+    </head>
+    <body>
+        <center><h1>DIRECTOR - TESTING VIEWS AND TEMPLATES</h1></center>
+
+        <!-- Creating a device -->
+        <div style="border-style:solid; padding-left: 20px">
+            <h3>Crear dispositivo</h3>
+            <form method="POST" action="/">
+                {% csrf_token %}
+                <p>Token</p>
+                <input type="text" name="device_token">
+                <input type="submit">
+            </form>
+        </div>
+        <br>
+        <!-- Creating a preceptor -->
+        <div style="border-style:solid; padding-left: 20px">
+            <h3>Crear preceptor</h3>
+            <form method="POST" action="/">
+                {% csrf_token %}
+                <p>Nombre</p>
+                <input type="text" name="preceptor_firstname">
+                <p>Apellido</p>
+                <input type="text" name="preceptor_lastname">
+                <p>Horario</p>
+                <input type="date" name="preceptor_schedule">
+                <input type="submit">
+            </form>
+        </div>
+    </body>
+</html>
