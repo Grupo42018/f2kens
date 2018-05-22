@@ -13,11 +13,73 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url
+from django.urls import path
 from django.contrib import admin
+#Import views from f2kens app
+from f2kens.views import *
 from frontend_token.views import *
 
+#TODO: Testear urls
+#TODO: Documentar
+#TODO: Agregar parametros a urls
+
+#URLS
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-    url(r'^$', index)
+
+    #Django admin
+    path('admin/', admin.site.urls),
+
+    #Index
+    #url(r'^/$', index, name="index"),
+
+    #CUD preceptor
+
+    #TODO: path("url/", view, name)
+
+    path('c-Preceptor/', createPreceptor, name="create_preceptor"),
+    path('u-Preceptor/<int:preceptor_id>', updatePreceptor, name="update_preceptor"),
+    path('d-Preceptor/<int:preceptor_id>', deletePreceptor, name="delete_preceptor"),
+
+    #CUD tutor
+    path('c-Tutor/', createTutor, name="create_tutor"),
+    path('u-Tutor/<int:tutor_id>', updateTutor, name="update_tutor"),
+    path('d-Tutor/<int:tutor_id>', deleteTutor, name="delete_tutor"),
+
+    #CUD student
+    path('c-Student/', createStudent, name="create_student"),
+    path('u-Student/<int:student_id>', updateStudent, name="update_student"),
+    path('d-Student/<int:student_id>', deleteStudent, name="delete_student"),
+
+    #CUD F2
+    path('c-F2/', createF2, name="create_F2"),
+    path('u-F2/<int:form2_id>', updateF2, name="update_F2"),
+    path('d-F2/<int:form2_id>', deleteF2, name="delete_F2"),
+
+    #CUD F3
+    path('c-F3/', createF3, name="create_F3"),
+    path('u-F3/<int:form3_id>', updateF3, name="update_F3"),
+    path('d-F3/<int:form3_id>', deleteF3, name="delete_F3"),
+
+    #CUD course
+    path('c-Course/', createCourse, name="create_course"),
+    path('u-Course/<int:course_id>', updateCourse, name="update_course"),
+    path('d-Course/<int:course_id>', deleteCourse, name="delete_course"),
+
+    #CUD absence
+    path('c-Absence/', createAbsence, name="create_absence"),
+    path('u-Absence/<int:absence_id>', updateAbsence, name="update_absence"),
+    path('d-Absence/<int:absence_id>', deleteAbsence, name="delete_absence"),
+
+    #CUD device
+    path('c-Device/', createDevice, name="create_device"),
+    path('u-Device/<int:device_id>', updateDevice, name="update_device"),
+    path('d-Device/<int:device_id>', deleteDevice, name="delete_device"),
+
+    #CUD auxiliar course
+    path('c-AuxCourse/', createAuxiliarCourse, name="create_auxCourse"),
+    path('u-AuxCourse/<int:auxCourse_id>', updateAuxiliarCourse, name="update_auxCourse"),
+    path('d-AuxCourse/<int:auxCourse_id>', deleteAuxiliarCourse, name="delete_auxCourse"),
+
+    #Index
+    path('', index, name="index")
 ]
