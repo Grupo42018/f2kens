@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+
+<html>
+{% load staticfiles %}
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="{% static 'css/login_style.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+
+	<form action="">
+		<div class="imgcontainer">
+			<i class="fa fa-user" id="avatar"></i>
+		</div>
+
+		<div class="container">
+			<label for="uname" class="label"><b>Username</b></label>
+			<input class="input" type="text" placeholder="Enter Username" name="uname" required>
+
+			<label for="psw" class="label"><b>Password</b></label>
+			<input class="input" type="password" placeholder="Enter Password" name="psw" required>
+			<button type="submit">Login</button>	
+		</div>    
+	</form>
+
+</body>
+</html>
+
+
+<!--
+<script>
+// Get the modal
+var modal = document.getElementById('id01');
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+</script>
+-->
