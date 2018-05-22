@@ -322,7 +322,7 @@ def createAbsence(request):
         student = Student.objects.get(id=request.POST['absence_student'])
         new_absence = Absence(
             justified=justified,
-            percentage=percentage
+            percentage=percentage,
             student=student
         )
         #HttpResponse solo para testear
