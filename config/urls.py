@@ -25,17 +25,13 @@ from frontend_token.views import *
 
 #URLS
 urlpatterns = [
-
     #Django admin
     path('admin/', admin.site.urls),
 
     #Index
-    #url(r'^/$', index, name="index"),
+    path('', index, name="index"),
 
     #CUD preceptor
-
-    #TODO: path("url/", view, name)
-
     path('c-Preceptor/', createPreceptor, name="create_preceptor"),
     path('u-Preceptor/<int:preceptor_id>', updatePreceptor, name="update_preceptor"),
     path('d-Preceptor/<int:preceptor_id>', deletePreceptor, name="delete_preceptor"),
@@ -78,8 +74,5 @@ urlpatterns = [
     #CUD auxiliar course
     path('c-AuxCourse/', createAuxiliarCourse, name="create_auxCourse"),
     path('u-AuxCourse/<int:auxCourse_id>', updateAuxiliarCourse, name="update_auxCourse"),
-    path('d-AuxCourse/<int:auxCourse_id>', deleteAuxiliarCourse, name="delete_auxCourse"),
-
-    #Index
-    path('', index, name="index")
+    path('d-AuxCourse/<int:auxCourse_id>', deleteAuxiliarCourse, name="delete_auxCourse")
 ]
