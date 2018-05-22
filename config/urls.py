@@ -15,12 +15,9 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-<<<<<<< HEAD
 #Import views from f2kens app
 from f2kens.views import *
-=======
 from frontend_token.views import *
->>>>>>> remotes/origin/ui/ux
 
 #TODO: Testear urls
 #TODO: Documentar
