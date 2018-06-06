@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import render
-from controlAsistencia import models, views
+from . import models
 
 ### ===> TAREAS:
 #TODO: Testear y documentar las vistas
@@ -358,7 +358,7 @@ def createAbsence(request):
         student = Student.objects.get(id=request.POST['absence_student'])
         new_absence = Absence(
             justified=justified,
-            percentage=percentage
+            percentage=percentage,
             student=student
         )
         #HttpResponse solo para testear

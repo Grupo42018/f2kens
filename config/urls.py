@@ -76,7 +76,7 @@ urlpatterns = [
     #CUD auxiliar course
     url(r'^c-AuxCourse/', createAuxiliarCourse, name="create_auxCourse"),
     url(r'^u-AuxCourse/', updateAuxiliarCourse, name="update_auxCourse"),
-    url(r'^d-AuxCourse/', deleteAuxiliarCourse, name="delete_auxCourse")
+    url(r'^d-AuxCourse/', deleteAuxiliarCourse, name="delete_auxCourse"),
 
     #Index
     url(r'^$', index)
