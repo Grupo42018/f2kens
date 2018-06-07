@@ -28,14 +28,11 @@ urlpatterns = [
 
     #Django admin
     path('admin/', admin.site.urls),
-
+    
     #Index
-    #url(r'^/$', index, name="index"),
+    path('i-Director', renderIndexDirector, name="index_director"),
 
     #CUD preceptor
-
-    #TODO: path("url/", view, name)
-
     path('c-Preceptor/', createPreceptor, name="create_preceptor"),
     path('u-Preceptor/<int:preceptor_id>', updatePreceptor, name="update_preceptor"),
     path('d-Preceptor/<int:preceptor_id>', deletePreceptor, name="delete_preceptor"),

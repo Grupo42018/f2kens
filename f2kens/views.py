@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.shortcuts import render
-from controlAsistencia import models, views
+from django.http import HttpResponse
+from django.shortcuts import render, redirect
+from controlAsistencia.models import *
+from controlAsistencia.views import *
 # Create your views here
 
 #TODO: Testear y documentar las vistas
@@ -18,10 +20,11 @@ def createPreceptor(request):
         new_preceptor = Preceptor(firstname=firstname, lastname=lastname, schedule=schedule)
         new_preceptor.save()
         #HttpResponse solo para testear
-        return HttpResponse("Preceptor creado")
+        print(new_preceptor)
+        return HttpResponse('Preceptor creado')
     except:
         #HttpResponse solo para testear
-        return HttpResponse("Error al crear el preceptor")
+        return HttpResponse('Error al crear el preceptor')
 
 def updatePreceptor(request, preceptor_id):
     firstname = request.POST['toUpdate_preceptor_firstname']
@@ -362,6 +365,7 @@ def createDevice(request):
     try:
         new_device = Device(token=token)
         new_device.save()
+        print(new_device)
         #HttpResponse solo para testear
         return HttpResponse('Dispositivo creado')
     except:
