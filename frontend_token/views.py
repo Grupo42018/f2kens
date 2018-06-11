@@ -7,3 +7,11 @@ from django.shortcuts import render
 
 def index(request):
 	return render(request, 'index.html')
+
+
+#DONE
+"""
+def indexPreceptor(request):
+	context = []
+	return render(request, 'preceptor.html', context)
+"""

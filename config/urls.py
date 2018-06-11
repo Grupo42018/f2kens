@@ -30,8 +30,8 @@ urlpatterns = [
     #Django admin
     url(r'^admin/', admin.site.urls),
 
-    #Index
-    #url(r'^/$', index, name="index"),
+    #Indexes
+    path('i-Preceptor', indexPreceptor, name='index_preceptor'),
 
     #CUD preceptor
     url(r'^c-Preceptor/', createPreceptor, name="create_preceptor"),
