@@ -7,6 +7,12 @@ from . import apiModel
 import datetime
 # Create your models here.
 
+F2_STATES = [
+    ('En Espera'),
+    ('Aprovado'),
+    ('Rechazado')
+]
+
 class Preceptor(models.Model):
     api_id=models.IntegerField()
     user=models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -19,7 +25,16 @@ class Device(models.Model):
     token = models.CharField(max_length=128)
     parent = models.ForeignKey(Parent, on_delete=models.CASCADE)
 
+class Formulario(models.Model):
+    student = models.IntegerField()
+    date = models.DateField(auto_now=True)
+    time = models.TimeField()
+    preceptor = models.ForeignKey(Preceptor)
 
+    class Meta:
+        abstract=True
+        verbose_name='Formulario'
+        verbose_name_plural='Formularios'
 
 class ApiYear(apiModel.ApiModel):
     _url = 'years/'
