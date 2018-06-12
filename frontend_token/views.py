@@ -9,5 +9,8 @@ def index(request):
 	return render(request, 'index.html')
 
 def indexPreceptor(request):
-	context = []
+	context = {}
+	context['formularios'] = Formulario2.objects.all()
+	context['preceptores'] = Preceptor.objects.all()
+	context['students'] = ApiStudent.getAll()
 	return render(request, 'preceptor.html', context)
