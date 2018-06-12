@@ -9,9 +9,9 @@ import datetime
 
 # Confirmaciones de Tutor
 F2_STATES = [
-    ('En Espera'),
-    ('Aprovado'),
-    ('Rechazado')
+    ('En Espera','En Espera'),
+    ('Aprobado','Aprobado'),
+    ('Rechazado','Rechazado')
 ]
 
 #clase preceptor usuario
@@ -19,15 +19,24 @@ class Preceptor(models.Model):
     api_id=models.IntegerField()
     user=models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return '%s' % (self.user)
+
 #clase tutor usuario
 class Parent(models.Model):
     api_id = models.IntegerField()
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return '%s' % (self.user)
+
 #clase dispositivo de tutor  
 class Device(models.Model):
     token = models.CharField(max_length=128)
     parent = models.ForeignKey(Parent, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return '%s' % (self.parent)
 
 #clase formulario
 class Formulario(models.Model):
@@ -41,8 +50,13 @@ class Formulario(models.Model):
         verbose_name='Formulario'
         verbose_name_plural='Formularios'
 
+    def __str__(self):
+        return '%s %s %s %s' % (self.student, self.date, self.time, self.preceptor)
+
+
 class Formulario2(Formulario):      ###clase formulario 2
     motivo_docente = models.CharField(max_lenght = 300)
+    state = models.CharField(choices=F2_STATES,default=En Espera)  ###state para las decicisiones (RECHAZAR, ACEPTAR, EN ESPERA)
     
 class Formulario3(Formulario):      ###clase formulario 3
     motivo_alumno = models.CharField(max_lenght = 300)
