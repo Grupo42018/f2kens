@@ -8,3 +8,5 @@ from .models import *
 admin.site.register(Preceptor)
 admin.site.register(Parent)
 admin.site.register(Device)
+admin.site.register(Formulario2)
+admin.site.register(Formulario3)
