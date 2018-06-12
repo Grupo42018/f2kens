@@ -9,7 +9,7 @@ import datetime
 
 # Confirmaciones de Tutor
 F2_STATES = [
-    ('En Espera','En Espera'),
+    ('EnEspera','En Espera'),
     ('Aprobado','Aprobado'),
     ('Rechazado','Rechazado')
 ]
@@ -56,7 +56,7 @@ class Formulario(models.Model):
 
 class Formulario2(Formulario):      ###clase formulario 2
     motivo_docente = models.CharField(max_lenght = 300)
-    state = models.CharField(choices=F2_STATES,default=En Espera)  ###state para las decicisiones (RECHAZAR, ACEPTAR, EN ESPERA)
+    state = models.CharField(choices=F2_STATES,default='EnEspera')  ###state para las decicisiones (RECHAZAR, ACEPTAR, EN ESPERA)
     
 class Formulario3(Formulario):      ###clase formulario 3
     motivo_alumno = models.CharField(max_lenght = 300)
