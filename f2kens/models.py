@@ -8,22 +8,31 @@ import datetime
 # Create your models here.
 
 F2_STATES = [
-    ('En Espera'),
-    ('Aprovado'),
-    ('Rechazado')
+    ('En Espera','En Espera'),
+    ('Aprobado','Aprobado'),
+    ('Rechazado','Rechazado')
 ]
 
 class Preceptor(models.Model):
     api_id=models.IntegerField()
     user=models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return '%s' % (self.user)
+
 class Parent(models.Model):
     api_id = models.IntegerField()
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return '%s' % (self.user)
+
 class Device(models.Model):
     token = models.CharField(max_length=128)
     parent = models.ForeignKey(Parent, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return '%s' % (self.parent)
 
 class Formulario(models.Model):
     student = models.IntegerField()
@@ -36,8 +45,12 @@ class Formulario(models.Model):
         verbose_name='Formulario'
         verbose_name_plural='Formularios'
 
+    def __str__(self):
+        return '%s %s %s %s' % (self.student,self.date,self.time,self.preceptor)
+
 class Formulario2(Formulario):
     motivo_docente = models.CharField(max_lenght = 300)
+    state = models.CharField(choices=F2_STATES,default=En Espera)
     
 class Formulario3(Formulario):
     motivo_alumno = models.CharField(max_lenght = 300)
