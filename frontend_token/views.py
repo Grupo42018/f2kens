@@ -22,3 +22,7 @@ def renderIndexDirector(request):
 	context['formularios2'] = Form2.objects.all()
 	context['formularios3'] = Form3.objects.all()
 	return render(request, 'test/directorTEST.html', context)
+
+def modalpre(request):
+	return render(request, 'modalpre.html')
+

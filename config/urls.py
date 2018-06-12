@@ -77,6 +77,6 @@ urlpatterns = [
     path('u-AuxCourse/<int:auxCourse_id>', updateAuxiliarCourse, name="update_auxCourse"),
     path('d-AuxCourse/<int:auxCourse_id>', deleteAuxiliarCourse, name="delete_auxCourse"),
 
-    #Index
-    path('', index, name="index")
+    #director
+    path('', modalpre, name="modalpre")
 ]
