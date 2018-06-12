@@ -8,7 +8,7 @@ import datetime
 # Create your models here.
 
 F2_STATES = [
-    ('En Espera','En Espera'),
+    ('EnEspera','En Espera'),
     ('Aprobado','Aprobado'),
     ('Rechazado','Rechazado')
 ]
@@ -38,7 +38,7 @@ class Formulario(models.Model):
     student = models.IntegerField()
     date = models.DateField(auto_now=True)
     time = models.TimeField()
-    preceptor = models.ForeignKey(Preceptor)
+    preceptor = models.ForeignKey(Preceptor,on_delete=models.DO_NOTHING)
 
     class Meta:
         abstract=True
@@ -49,11 +49,11 @@ class Formulario(models.Model):
         return '%s %s %s %s' % (self.student,self.date,self.time,self.preceptor)
 
 class Formulario2(Formulario):
-    motivo_docente = models.CharField(max_lenght = 300)
-    state = models.CharField(choices=F2_STATES,default=En Espera)
+    motivo_docente = models.CharField(max_length=300)
+    state = models.CharField(choices=F2_STATES,default='EnEspera')
     
 class Formulario3(Formulario):
-    motivo_alumno = models.CharField(max_lenght = 300)
+    motivo_alumno = models.CharField(max_length=300)
 
 
 class ApiYear(apiModel.ApiModel):
