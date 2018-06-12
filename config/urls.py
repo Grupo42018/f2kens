@@ -13,7 +13,7 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url
+from django.urls import path
 from django.contrib import admin
 #Import views from f2kens app
 from f2kens.views import *
@@ -31,6 +31,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     #Indexes
-    path('i-Preceptor', indexPreceptor, name='index_preceptor'),
-    
+    path('i-Preceptor/', indexPreceptor, name='index_preceptor'),
+    path('c-F2/', createF2, name='create_F2'),
 ]
