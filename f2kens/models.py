@@ -36,6 +36,24 @@ class Formulario(models.Model):
         verbose_name='Formulario'
         verbose_name_plural='Formularios'
 
+class Formulario(models.Model):
+    student = models.IntegerField()
+    date = models.DateField(auto_now=True)
+    time = models.TimeField()
+    preceptor = models.ForeignKey(Preceptor)
+
+    class Meta:
+        abstract=True
+        verbose_name='Formulario'
+        verbose_name_plural='Formularios'
+
+class Formulario2(Formulario):
+    motivo_docente = models.CharField(max_lenght = 300)
+    
+class Formulario3(Formulario):
+    motivo_alumno = models.CharField(max_lenght = 300)
+
+
 class ApiYear(apiModel.ApiModel):
     _url = 'years/'
     year_number = apiModel.Field(int)
