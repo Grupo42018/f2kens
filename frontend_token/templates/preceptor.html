@@ -1,0 +1,21 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Preceptor</title>
+    </head>
+    <body>
+        <!-- TODO: Corregir envio de form -->
+        <h1>Preceptor Template TEST</h1>
+        <form method='POST' action='{% url "create_F2" %}'>
+            {% csrf_token %}
+            <select name='dni'>
+                {% for student in students %}
+                    <option value="{{ student.dni }}">Estudiante {{ student.first_name }} {{ student.last_name }}</option>
+                {% endfor %}
+            </select>
+            <input type='date' name='date' placeholder='Fecha' required>
+            <input type='text' name='time' placeholder='Horario' required>
+            <button type='submit'>Enviar</button>
+        </form>
+    </body>
+</html>

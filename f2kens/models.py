@@ -19,7 +19,15 @@ class Device(models.Model):
     token = models.CharField(max_length=40)
     parent = models.ForeignKey(Parent, on_delete=models.CASCADE)
 
-
+class Formulario2(models.Model):
+    student = models.IntegerField()
+    date = models.DateField('Fecha', auto_now=True)
+    time = models.TimeField()
+    preceptor = models.ForeignKey(Preceptor, on_delete=models.CASCADE)
+    
+    class Meta:
+        verbose_name='Formulario2'
+        verbose_name_plural='Formularios2'
 
 class ApiYear(apiModel.ApiModel):
     _url = 'years/'
