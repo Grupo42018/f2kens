@@ -108,16 +108,12 @@ def createF2(request):
     new_F2.save() # Save the F2 object
     print(new_F2) # Log the created object
     subject = "F2KENS: Nuevo formulario de alumno"
-    message = "<h3 style='color:green'>Un alumno espera su confirmacion para retirarse</h3><br><button>CONFIRMAR</button><button>RECHAZAR</button>"
+    #message = "<h3 style='color:green'>Un alumno espera su confirmacion para retirarse</h3><br><button>CONFIRMAR</button><button>RECHAZAR</button>"
+    message = '127.0.0.1:8000/forms2recibidos/'
     from_user = 'f2kens@gmail.com'
     to_users = [
-        'marianovalle13@gmail.com',
-        'emilioalvarezgg@gmail.com',
         'javierpugliese2000@gmail.com',
-        'juan.fierrofv@gmail.com',
-        'f2kens@gmail.com',
-        'martin_montane_6@hotmail.com',
-        'mateosenes@gmail.com'
+        'f2kens@gmail.com'
     ]
     send_mail(
         subject,
@@ -128,5 +124,16 @@ def createF2(request):
     )
     return redirect('index_preceptor')
 
-def checkForm(request, form_id, mod):
-    pass
+def updateF2state(request, form2_id):
+    get_form2 = Formulario2.objects.get(id=form2_id)
+    get_state = request.POST['estado']
+    if get_state == 'Aceptado':
+        get_form2.state = 'Aceptado'
+        get_form2.save()
+        return HttpResponse('FORMULARIO ACEPTADO')
+    elif get_state == 'Rechazado':
+        get_form2.state = 'Rechazado'
+        get_form2.save()
+        return HttpResponse('FORMULARIO RECHAZADO')
+    else:
+        return HttpResponse('FORMULARIO PUESTO EN ESPERA')
