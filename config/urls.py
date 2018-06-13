@@ -33,5 +33,6 @@ urlpatterns = [
     #Indexes
     path('i-Preceptor/', indexPreceptor, name='index_preceptor'),
     path('c-F2/', createF2, name='create_F2'),
-    path('state/<int:form2_id>/<int:mod>', checkForm, name='verificarXD')
+    path('forms2recibidos/', getForms2, name='recibir_F2'),
+    path('forms2recibidos/<int:form2_id>/', updateF2state, name='estado_f2')
 ]
