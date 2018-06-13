@@ -46,17 +46,6 @@ class Formulario(models.Model):
         verbose_name_plural='Formularios'
 
     def __str__(self):
-<<<<<<< Updated upstream
-        return '%s %s %s %s' % (self.student,self.date,self.time,self.preceptor)
-
-class Formulario2(Formulario):
-    motivo_docente = models.CharField(max_length=300)
-    state = models.CharField(choices=F2_STATES,default='EnEspera')
-    
-class Formulario3(Formulario):
-    motivo_alumno = models.CharField(max_length=300)
-
-=======
         return '{stud} {date} {time} {prec}'.format(
             stud=self.student, 
             date=self.date, 
@@ -90,7 +79,6 @@ class Formulario3(Formulario):      ###clase formulario 3
         basestr = super().__str__()
         return "{name} {old}".format(name=self.Meta.verbose_name, old=basestr)
 
->>>>>>> Stashed changes
 
 class ApiYear(apiModel.ApiModel):
     _url = 'years/'
