@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+
+<html>
+{% load staticfiles %}
+<head>
+<style>
+body {background-color: lightblue;}
+h1 {color:blue;}
+p {color:darkblue;}
+</style>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="{% static 'css/style_creacion_F2.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+</head>
+<body>
+    
+<h1>Formulario f2</h1>
+<p>introduzca hora y fecha.</p>
+    <input id="datetime12" data-format="DD-MM-YYYY h:mm a" data-template="DD / MM / YYYY     hh : mm a" name="datetime" value="21-12-2012 8:30 pm" type="text">
+    <script>
+    $(function(){
+        $('#datetime12').combodate();  
+    });
+    </script>
+</body>
+</html>
