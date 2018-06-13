@@ -122,9 +122,12 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
 
+
 ASISTENCIA={
-    'API': '127.0.0.1:5000',
-    'baseroute': '/api/',
-    'user': 'martin',
-    'password': 'plmoknijb'
+    'API': '127.0.0.1',
+    'PORT': '5000',
+    'BASEPATH': '/api/',
+    'TIMEOUT': 10,
+    'USER': 'martin',
+    'PASS': 'plmoknijb',
 }
