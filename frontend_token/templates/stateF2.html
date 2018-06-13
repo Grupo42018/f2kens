@@ -1,0 +1,21 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Tutor</title>
+    </head>
+    <body>
+        <!-- FIXME-->
+        <h1>Aceptar o rechazar formulario</h1>
+        {% for f2 in formularios2 %}
+        <form method='POST' action='{% url "estado_f2" form2_id=f2.id %}'>
+            {% csrf_token %}
+            <p>Estado actual: {{ f2.state }}</p>
+            <select name='estado'>
+                <option value='Aceptado'>Aceptar</option>
+                <option value='Rechazado'>Rechazar</option>
+            </select>
+            <input type='submit'>
+        </form>
+        {% endfor %}
+    </body>
+</html>

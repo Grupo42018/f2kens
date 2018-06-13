@@ -3,6 +3,8 @@
 from django.conf import settings
 from django.db import migrations, models
 import django.db.models.deletion
+import f2kens.apiModel
+import f2kens.models
 
 
 class Migration(migrations.Migration):
@@ -35,6 +37,10 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
+                ('token', models.CharField(max_length=128)),
+            ],
+        ),
+        migrations.CreateModel(
             name='Parent',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
@@ -46,14 +52,9 @@ class Migration(migrations.Migration):
             name='Preceptor',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('api_id', models.IntegerField()),
+                ('api_id', f2kens.apiModel.ApiField(apicls=f2kens.models.ApiPreceptor)),
                 ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
-        ),
-        migrations.AddField(
-            model_name='formulario2',
-            name='preceptor',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='f2kens.Preceptor'),
         ),
         migrations.AddField(
             model_name='device',

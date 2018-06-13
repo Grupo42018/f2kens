@@ -70,3 +70,26 @@ class ApiAbsence(apiModel.ApiModelSaveable):
     percentage = apiModel.Field(float)
     registro = apiModel.Field(ApiRegistro)
     student = apiModel.Field(ApiStudent)
+
+class Preceptor(models.Model):
+    model=apiModel.ApiField(ApiPreceptor, unique=True)
+    user=models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+class Parent(models.Model):
+    model = apiModel.ApiField(ApiParent, unique=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+class Device(models.Model):
+    token = models.CharField(max_length=128)
+    parent = models.ForeignKey(Parent, on_delete=models.CASCADE)
+
+class Formulario(models.Model):
+    student = apiModel.ApiField(ApiStudent)
+    date = models.DateField(auto_now=True)
+    time = models.TimeField()
+    preceptor = models.ForeignKey(Preceptor, on_delete=models.DO_NOTHING)
+
+    class Meta:
+        abstract=True
+        verbose_name='Formulario'
+        verbose_name_plural='Formularios'
