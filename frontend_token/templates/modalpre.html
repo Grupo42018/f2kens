@@ -11,114 +11,77 @@
 	</head>
 
 	<body>
-
-		<button onclick="document.getElementById('id01').style.display='block'" style="width:auto;">F2</button>
-
-		<div id="id01" class="modal">
-		    <div class="imgcontainer">
-		      <span onclick="document.getElementById('id01').style.display ='none'" class="close" title="Close Modal">&times;</span> 
-		    </div>
-			<div class="card" style="width: 18rem;">
-  				<img class="card-img-top" src="http://themicon.co/theme/centric/v1.9.5/html5jquery/app/img/user/04.jpg" alt="Card image cap">
-  				<div class="card-body">
-    				<h5 class="card-title">Card title</h5>
-    				<p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-  				</div>
-			</div>
-		</div>
-
 		<div id="containerbox">
 			<input type="text" id="searchBox" onkeyup="myFunction()" placeholder=" Search for names.." title="Type in a name">
 			<i class="fa fa-search" id="searchIcon"></i>
 
-			<div class="ul">
-				<label class="container">One
-	    			<input type="checkbox" checked="checked">
-					<span class="checkmark"></span>
+			<div class="list">
+				<label class="container ">Mateo Senestrari<input  type="button" onclick="document.getElementById('id01').style.display='block'">
 				</label>
-				<label class="container">Two
-					<input type="checkbox">
-					<span class="checkmark"></span>
+				<label class="container ">Carlos Perez<input  type="button" onclick="document.getElementById('id01').style.display='block'">
 				</label>
-				<label class="container">Three
-					<input type="checkbox">
-					<span class="checkmark"></span>
+				<label class="container ">Emilio Alvarez<input  type="button" onclick="document.getElementById('id01').style.display='block'">
 				</label>
-				<label class="container">Four
-					<input type="checkbox">
-					<span class="checkmark"></span>
+				<label class="container ">Mariano Valle<input  type="button" onclick="document.getElementById('id01').style.display='block'">
 				</label>
-				<label class="container">Four
-					<input type="checkbox">
-					<span class="checkmark"></span>
+				<label class="container ">Fausto Pigliacampo<input  type="button" onclick="document.getElementById('id01').style.display='block'">
 				</label>
-				<label class="container">Four
-					<input type="checkbox">
-					<span class="checkmark"></span>
+				<label class="container ">Martin Montane<input  type="button" onclick="document.getElementById('id01').style.display='block'">
 				</label>
-				<label class="container">Four
-					<input type="checkbox">
-					<span class="checkmark"></span>
+				<label class="container ">Juan Fierro<input  type="button" onclick="document.getElementById('id01').style.display='block'">
 				</label>
-				<label class="container">Four
-					<input type="checkbox">
-					<span class="checkmark"></span>
-				</label>
-				<label class="container">Four
-					<input type="checkbox">
-					<span class="checkmark"></span>
-				</label>
-				<label class="container">Four
-					<input type="checkbox">
-					<span class="checkmark"></span>
-				</label>
-				<label class="container">Four
-					<input type="checkbox">
-					<span class="checkmark"></span>
-				</label>
-				<label class="container">Four
-					<input type="checkbox">
-					<span class="checkmark"></span>
-				</label>
-				<label class="container">Four
-					<input type="checkbox">
-					<span class="checkmark"></span>
+				<label class="container ">Javier Pugliese<input  type="button" onclick="document.getElementById('id01').style.display='block'">
 				</label>
 			</div>
 		</div>
 
-		<script>
-		// Get the modal
-		var modal = document.getElementById('id01');
+		<div id="id01" class="modal">
+			<div class="card animate" id="cardstyle">
+				<span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
+  				<img class="card-img-top" src="http://themicon.co/theme/centric/v1.9.5/html5jquery/app/img/user/04.jpg" alt="Card image cap">
+  				<div class="card-body">
+    				<h5 class="card-title">NOMBRE APELLIDO</h5>
+    				<p class="card-text">Informacion general.</p>
+  				</div>
+			</div>
+		</div>
 
-		// When the user clicks anywhere outside of the modal, close it
-		window.onclick = function(event) {
-		    if (event.target == modal) {
-		        modal.style.display = "none";
-		    }
-		}
-		</script>
 
-		<script>
-			function myFunction() {
-			    var input, filter, ul, li, a, i;
-			    input = document.getElementById("searchBox");
-			    filter = input.value.toUpperCase();
-			    ul = document.getElementById("container");
-			    li = ul.getElementsByTagName("li");
-			    for (i = 0; i < li.length; i++) {
-			        a = li[i].getElementsByTagName("a")[0];
-			        if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
-			            li[i].style.display = "";
-			        } else {
-			            li[i].style.display = "none";
 
-			        }
-			    }
-			}
-		</script>
 
 	</body>
+
+<script>
+// Get the modal
+var modal = document.getElementById('id01');
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+</script>
+
+<script>
+	function myFunction() {
+	    var input, filter, ul, li, a, i;
+	    input = document.getElementById("searchBox");
+	    filter = input.value.toUpperCase();
+	    ul = document.getElementById("containerbox");
+	    li = ul.getElementsByTagName("label");
+	    for (i = 0; i < li.length; i++) {
+	        if (li[i].innerHTML.toUpperCase().indexOf(filter) > -1) {
+	            li[i].style.display = "";
+	        } else {
+	            li[i].style.display = "none";
+
+	        }
+	    }
+	}
+		</script>
+
+
 
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
