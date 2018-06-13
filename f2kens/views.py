@@ -1,12 +1,10 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import *
 from django.core.mail import send_mail, send_mass_mail, EmailMessage
 
 """
+
 def createF2(request):
     '''
     Esta vista se usa para crear F2. Se envia
