@@ -33,6 +33,7 @@ urlpatterns = [
     path('i-Director', renderIndexDirector, name="index_director"),
 
     #CUD preceptor
+    path('Menu_preceptor/', plantilla, name="plantilla"),
     path('c-Preceptor/', createPreceptor, name="create_preceptor"),
     path('u-Preceptor/<int:preceptor_id>', updatePreceptor, name="update_preceptor"),
     path('d-Preceptor/<int:preceptor_id>', deletePreceptor, name="delete_preceptor"),

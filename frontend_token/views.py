@@ -2,8 +2,7 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import render
-from controlAsistencia.models import *
-from controlAsistencia.views import *
+from f2kens.models import *
 # Create your views here.
 
 def index(request):
@@ -25,4 +24,8 @@ def renderIndexDirector(request):
 
 def modalpre(request):
 	return render(request, 'modalpre.html')
+
+
+def plantilla(request):
+	return render(request, 'creacion_F2.html')
 
