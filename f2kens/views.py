@@ -4,12 +4,15 @@ from __future__ import unicode_literals
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 # Create your views here
+from .models import *
 
+### ===> TAREAS:
 #TODO: Testear y documentar las vistas
 #TODO: Agregar los correspondientes decoradores de vistas
 #TODO: Cambiar los HttpResponse por render o redirect
 #TODO: Ordenar codigo (clean code)
 
+#Funcion de Crear Preceptor
 def createPreceptor(request):
     firstname = request.POST['preceptor_firstname']
     lastname = request.POST['preceptor_lastname']
@@ -24,6 +27,8 @@ def createPreceptor(request):
         #HttpResponse solo para testear
         return HttpResponse('Error al crear el preceptor')
 
+
+#Funcion de Actualizar Preceptor
 def updatePreceptor(request, preceptor_id):
     firstname = request.POST['toUpdate_preceptor_firstname']
     lastname = request.POST['toUpdate_preceptor_lastname']
@@ -42,6 +47,8 @@ def updatePreceptor(request, preceptor_id):
         #HttpResponse solo para testear
         return HttpResponse('Error al actualizar el preceptor')
 
+
+#Funcion de Borrar Preceptor
 def deletePreceptor(request, preceptor_id):
     try:
         get_preceptor = Preceptor.objects.get(id=preceptor_id)          
@@ -51,7 +58,8 @@ def deletePreceptor(request, preceptor_id):
     except:
         #HttpResponse solo para testear
         return HttpResponse("Error al eliminar el preceptor")
-    
+
+#Funcion de Crear Tutor
 def createTutor(request):
     firstname = request.POST['tutor_firstname']
     lastname = request.POST['tutor_lastname']
@@ -67,6 +75,8 @@ def createTutor(request):
         #HttpResponse solo para testear
         return HttpResponse("Error al crear tutor")
 
+
+#Funcion de Actualizar Tutor
 def updateTutor(request, tutor_id):
     firstname = request.POST['toUpdate_tutor_firstname']
     lastname = request.POST['toUpdate_tutor_lastname']
@@ -88,6 +98,8 @@ def updateTutor(request, tutor_id):
         #HttpResponse solo para testear
         return HttpResponse("Error al actualizar el tutor")
 
+
+#Funcion de Borrar Tutor
 def deleteTutor(request, tutor_id):
     try:
         get_tutor = Tutor.objects.get(id=tutor_id)          
@@ -98,6 +110,8 @@ def deleteTutor(request, tutor_id):
         #HttpResponse solo para testear
         return HttpResponse("Error al eliminar el Tutor")
 
+
+#Funcion de Crear Estudiante
 def createStudent(request):
     firstname = request.POST['student_firstname']
     lastname = request.POST['student_lastname']
@@ -136,6 +150,8 @@ def createStudent(request):
         #HttpResponse solo para testear
         return HttpResponse("Error al crear el alumno")
 
+
+#Funcion de Actualizar Estudiante
 def updateStudent(request, student_id):
     firstname = request.POST['toUpdate_student_firstname']
     lastname = request.POST['toUpdate_student_lastname']
@@ -175,6 +191,8 @@ def updateStudent(request, student_id):
         #HttpResponse solo para testear
         return HttpResponse("Error al actualizar el alumno")
 
+
+#Funcion de Borrar Estudiantes
 def deleteStudent(request, student_id):
     try:
         get_student = Student.objects.get(id=student_id)          
@@ -185,6 +203,8 @@ def deleteStudent(request, student_id):
         #HttpResponse solo para testear
         return HttpResponse("Error al eliminar el alumno")
 
+
+#Funcion de Crear un Formulario N°2 
 def createF2(request):
     schedule = request.POST['f2_schedule']
     #No se necesita date porque se crea automaticamente con la flecha actual
@@ -200,6 +220,8 @@ def createF2(request):
         #HttpResponse solo para testear
         return HttpResponse("Error al crear el F2")
 
+
+#Funcion de Actualizar el Formulario N°2
 def updateF2(request, form2_id):
     schedule = request.POST['toUpdate_f2_schedule']
     try:
@@ -218,6 +240,8 @@ def updateF2(request, form2_id):
         #HttpResponse solo para testear
         return HttpResponse('Error al actualizar el F2')
 
+
+#Funcion de Borrar el Formulario N°2
 def deleteF2(request, form2_id):
     try:
         get_f2 = Form2.objects.get(id=form2_id)          
@@ -228,6 +252,8 @@ def deleteF2(request, form2_id):
         #HttpResponse solo para testear
         return HttpResponse("Error al eliminar el F2")
 
+
+#Funcion de Crear un Formulario N°3
 def createF3(request):
     schedule = request.POST['f3_schedule']
     reason = request.POST['f3_reason']
@@ -244,6 +270,8 @@ def createF3(request):
         #HttpResponse solo para testear
         return HttpResponse("Error al crear el F3")
 
+
+#Funcion de Actualizar el Formulario N°3
 def updateF3(request, form3_id):
     schedule = request.POST['toUpdate_f3_schedule']
     reason = request.POST['toUpdate_f3_reason']
@@ -264,6 +292,8 @@ def updateF3(request, form3_id):
         #HttpResponse solo para testear
         return HttpResponse('Error al actualizar el F3')
 
+
+#Funcion de Borrar el Formulario N°3
 def deleteF3(request, form3_id):
     try:
         get_f3 = Form3.objects.get(id=form3_id)          
@@ -274,6 +304,8 @@ def deleteF3(request, form3_id):
         #HttpResponse solo para testear
         return HttpResponse("Error al eliminar el F3")
 
+
+#Funcion de Crear Curso
 def createCourse(request):
     year = request.POST['course_year']
     division = request.POST['course_division']
@@ -288,6 +320,8 @@ def createCourse(request):
         #HttpResponse solo para testear
         return HttpResponse("Error al creado el curso")
 
+
+#Funcion de Actualizar Curso
 def updateCourse(request, course_id):
     year = request.POST['toUpdate_course_year']
     division = request.POST['toUpdate_course_division']
@@ -306,6 +340,8 @@ def updateCourse(request, course_id):
         #HttpResponse solo para testear
         return HttpResponse("Error al actualizar el curso")
 
+
+#Funcion de Borrar Curso
 def deleteCourse(request, course_id):
     try:
         get_course = Curso.objects.get(id=course_id)          
@@ -316,6 +352,8 @@ def deleteCourse(request, course_id):
         #HttpResponse solo para testear
         return HttpResponse("Error al eliminar el curso")
 
+
+#Funcion de Crear Ausencia
 def createAbsence(request):
     justified = request.POST['absence_justified']
     percentage = request.POST['absence_percentage']
@@ -332,6 +370,8 @@ def createAbsence(request):
         #HttpResponse solo para testear
         return HttpResponse("Error al crear la asistencia")
 
+
+#Funcion de Actualizar Ausencia
 def updateAbsence(request, absence_id):
     try:
         get_student = Student.objects.get(id=request.POST['toUpdate_absence_student'])
@@ -348,6 +388,8 @@ def updateAbsence(request, absence_id):
         #HttpResponse solo para testear
         return HttpResponse("Error al actualizar la asistencia")
 
+
+#Funcion de Borrar Ausencia
 def deleteAbsence(request, abscence_id):
     try:
         get_abscence = Abscence.objects.get(id=abscence_id)          
@@ -358,6 +400,8 @@ def deleteAbsence(request, abscence_id):
         #HttpResponse solo para testear
         return HttpResponse("Error al eliminar la asistencia")
 
+
+#Funcion de Crear un Dispositivo
 def createDevice(request):
     token = request.POST['device_token']
     try:
@@ -370,6 +414,9 @@ def createDevice(request):
         #HttpResponse solo para testear
         return HttpResponse("Error al crear el dispositivo")
 
+
+
+#Funcion de Actualizar un Dispositivo
 def updateDevice(request, device_id):
     try:
         toUpdate_device = Device(id=device_id, token=request.POST['toUpdate_device_token'])
@@ -380,6 +427,8 @@ def updateDevice(request, device_id):
         #HttpResponse solo para testear
         return HttpResponse("Error al actualizar el dispositivo")
 
+
+#Funcion de Borrar un Dispositivo
 def deleteDevice(request, device_id):
     try:
         get_device = Device.objects.get(id=device_id)          
@@ -390,6 +439,9 @@ def deleteDevice(request, device_id):
         #HttpResponse solo para testear
         return HttpResponse("Error al eliminar el dispositivo")
 
+
+
+#Funcion para Crear un Curso Auxiliar
 def createAuxiliarCourse(request):
     try:
         new_auxCourse = Curso_aux(
@@ -403,6 +455,9 @@ def createAuxiliarCourse(request):
         #HttpResponse solo para testear
         return HttpResponse("Error al crear el curso auxiliar")
 
+
+
+#Funcion de Actualizar Curso Auxiliar
 def updateAuxiliarCourse(request, auxCourse_id):
     try:
         get_preceptor = Preceptor.objects.get(id=request.POST['toUpdate_auxCourse_preceptor'])
@@ -419,6 +474,9 @@ def updateAuxiliarCourse(request, auxCourse_id):
         #HttpResponse solo para testear
         return HttpResponse("Error al actualizar el curso auxiliar")
 
+
+
+#Funcion de Elimar Clase Auxiliar
 def deleteAuxiliarCourse(request, auxCourse_id):
     try:
         get_auxCourse = Curso_aux.objects.get(id=auxCourse_id)          
