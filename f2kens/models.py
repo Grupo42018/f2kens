@@ -46,6 +46,7 @@ class Formulario(models.Model):
         verbose_name_plural='Formularios'
 
     def __str__(self):
+<<<<<<< Updated upstream
         return '%s %s %s %s' % (self.student,self.date,self.time,self.preceptor)
 
 class Formulario2(Formulario):
@@ -55,6 +56,41 @@ class Formulario2(Formulario):
 class Formulario3(Formulario):
     motivo_alumno = models.CharField(max_length=300)
 
+=======
+        return '{stud} {date} {time} {prec}'.format(
+            stud=self.student, 
+            date=self.date, 
+            time=self.time, 
+            prec=self.preceptor)
+
+
+class Formulario2(Formulario):      ###clase formulario 2
+    motivo_docente = models.CharField(max_length=300)
+    state = models.CharField(
+        max_length=50,
+        choices=F2_STATES,
+        default='EnEspera')  ###state para las decicisiones (RECHAZAR, ACEPTAR, EN ESPERA)
+    
+    class Meta:
+        verbose_name = 'F2'
+        verbose_name_plural = 'F2es'
+
+    def __str__(self):
+        basestr = super().__str__()
+        return "{name} {old}".format(name=self.Meta.verbose_name, old=basestr)
+
+class Formulario3(Formulario):      ###clase formulario 3
+    motivo_alumno = models.CharField(max_length=300)
+
+    class Meta:
+        verbose_name = 'F3'
+        verbose_name_plural = 'F3es'
+
+    def __str__(self):
+        basestr = super().__str__()
+        return "{name} {old}".format(name=self.Meta.verbose_name, old=basestr)
+
+>>>>>>> Stashed changes
 
 class ApiYear(apiModel.ApiModel):
     _url = 'years/'
