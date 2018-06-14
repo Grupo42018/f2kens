@@ -133,6 +133,6 @@ ASISTENCIA={
     'PORT': '5000',
     'BASEPATH': '/api/',
     'TIMEOUT': 10,
-    'USER': 'martin',
-    'PASS': 'plmoknijb',
+    'USER': 'admin',
+    'PASS': 'admin123',
 }

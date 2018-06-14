@@ -9,6 +9,7 @@ import time
 from django.conf import settings
 from django.utils import encoding
 from django.db import models
+from django import forms
 from django.utils.translation import gettext_lazy as _
 
 
@@ -42,7 +43,7 @@ class APIModel(object):
         for attr in self.__class__.__dict__.keys():
             # Any attribute that has an underscore at the beggining of its name
             # won't be modified
-            if (attr.startswith('_')
+            if (not attr.startswith('_')
                     and attr is not None):
                 self._attributes.append(attr)
                 try:
@@ -137,7 +138,7 @@ class APIModel(object):
         # Make the request
         try:
             conn.request(method, "{}{}{}".format(
-                         BASEROUTE, cls._url, urlattr),
+                         BASEPATH, cls._url, urlattr),
                          body=body, headers=headers)
 
         except socket.timeout as exc:
@@ -161,6 +162,8 @@ class APIModel(object):
                      HTTP requests") from cre
 
         response = conn.getresponse()
+        print("{}{}{}".format(
+                         BASEPATH, cls._url, urlattr))
         if response.status == 404:
             raise NotFoundError(
                 "The url with the requested attributes could not be found")
@@ -285,7 +288,7 @@ class ApiField(models.Field):
             return value
         return self.class_.get(rid=value)
 
-    def to_python(self):
+    def to_python(self, value):
         if isinstance(value, APIModel):
             return value
 
@@ -357,17 +360,17 @@ if ('TIMEOUT' in APICONF.keys()):
 else:
     TIMEOUT = 10                  # Default to 10s 
 
-if ('BASEROUTE' in APICONF.keys()):
-    BASEROUTE = APICONF['BASEROUTE']
+if ('BASEPATH' in APICONF.keys()):
+    BASEPATH = APICONF['BASEPATH']
 else:
-    BASEROUTE = '/'               # Defaults to the root of the url
+    BASEPATH = '/'               # Defaults to the root of the url
 
 # check if the connection works. I do this by checking the base route
 # of the api with a HEAD method
 conn = http.HTTPConnection(ADDR, port=PORT, timeout=TIMEOUT)
 
 try:
-    conn.request("HEAD", BASEROUTE)
+    conn.request("HEAD", BASEPATH)
 except socket.timeout as exc:
     # If the connection times out raise timeout TimeoutError
     raise TimeoutError(
@@ -379,7 +382,7 @@ except ConnectionRefusedError:
     conn.close()
     conn = http.HTTPConnection(ADDR, port=PORT, timeout=TIMEOUT)
     try:
-        conn.request("HEAD", BASEROUTE)
+        conn.request("HEAD", BASEPATH)
     except ConnectionRefusedError as cre:
         # If it fails again the server is not HTTP
         raise NotAHTTPServerError(
