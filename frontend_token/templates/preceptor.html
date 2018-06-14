@@ -6,7 +6,7 @@
     <body>
         <!-- TODO: Corregir envio de form -->
         <h1>Preceptor Template TEST</h1>
-        <form method='POST' action='{% url "create_F2" %}'>
+        <form method='POST' action='{% url "create_f2" %}'>
             {% csrf_token %}
             <select name='dni'>
                 {% for student in students %}
