@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from f2kens.models import *
 
 def index(request):
-	return render(request, 'preceptor.html')
+	return render(request, 'index.html')
 
 def index_preceptor(request):
 	context = {}

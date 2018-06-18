@@ -162,8 +162,6 @@ class APIModel(object):
                      HTTP requests") from cre
 
         response = conn.getresponse()
-        print("{}{}{}".format(
-                         BASEPATH, cls._url, urlattr))
         if response.status == 404:
             raise NotFoundError(
                 "The url with the requested attributes could not be found")
