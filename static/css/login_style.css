@@ -1,9 +1,3 @@
-'''
-Template de Login --- Interfaz grafica de inicio de sesion
-'''
-
-
-
 body {
 	font-family: Arial, Helvetica, sans-serif;
 	background-color: powderblue;
@@ -12,17 +6,13 @@ body {
 	background-attachment: fixed;
 }
 
+body, html {
+    height: 100%;
+}
+
 form {
 	border: 5px solid #ffffff50;
 	border-radius: 20px 20px 20px 20px;
-}
-
-form{
-	margin-top: 70px;
-	margin-left: 450px;
-	margin-right: 450px;
-	margin-bottom: 50px;
-
 }
 
 #avatar{
@@ -51,12 +41,11 @@ button {
     background-color: #ffffff90;
     color: #5981D7;
     font-size: 20px;
-    border-radius: 12px 12px 12px 12px;
+    border-radius: 12px;
     padding: 14px 20px;
     margin: 15px 150px;
     border: none;
     cursor: pointer;
-    width: 25%;
 }
 
 button:hover {
