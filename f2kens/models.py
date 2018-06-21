@@ -17,6 +17,9 @@ class ApiYear(apiModel.APIModel):
     year_number = apiModel.Field(int)
     division = apiModel.Field(str)
 
+    def __str__(self):
+        return "{} {}".format(self.year_number, self.division)
+
 
 class ApiPreceptor(apiModel.APIModel):
     _url = 'preceptors/'

@@ -1,9 +1,13 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+import json
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
-from .models import *
+from django.http import HttpResponse, JsonResponse
 from django.core.mail import send_mail, send_mass_mail, EmailMessage
+from django.contrib.auth.decorators import login_required, permission_required
+
+from .models import *
+
 
 def create_f2(request):
     '''
@@ -49,3 +53,15 @@ def update_f2_state(request, form2_id):
         return HttpResponse('FORMULARIO RECHAZADO')
     else:
         return HttpResponse('FORMULARIO PUESTO EN ESPERA')
+
+
+def get_students(request):
+    a = []
+    for i in ApiStudent.get_all():
+        a.append({
+            'id': i._api_id,
+            'first_name': i.first_name,
+            'last_name': i.last_name,
+            'year': str(i.year)
+            })
+    return JsonResponse(a, safe=False)
