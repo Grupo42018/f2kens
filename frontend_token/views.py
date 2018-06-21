@@ -3,11 +3,6 @@ from f2kens.models import *
 
 # Create your views here.
 
-"""
-def index(request):
-	return render(request, 'login.html')
-"""
-
 def renderIndexDirector(request):
 	context = {}
 	context['preceptores'] = Preceptor.objects.all()
@@ -24,9 +19,6 @@ def renderIndexDirector(request):
 
 def modalpre(request):
 	return render(request, 'modalpre.html')
-
-def index(request):
-	return render(request, 'preceptor.html')
 
 def index_preceptor(request):
 	context = {}
