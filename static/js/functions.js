@@ -10,29 +10,29 @@ $('document').ready(function(){
         };
     }
 
-    $('#student-filter-f2').keyup(filter)
-
-    load_students()
+    load_years()
 });
 
 
-function load_students(){
+function load_years(){
     $.ajax({
-        url:"/f2kens/get_students/",
+        url:"/f2kens/get_years/",
     }).done(function(data){
         studentlist = data;
 
         for (var i = 0; i<studentlist.length; i++){
-            create_student_cb(studentlist[i]);
+            create_year_cb(studentlist[i]);
     }
     });
 }
 
-function create_student_cb(stud){
-    var list = $('#studentlist')[0];
+function create_year_cb(year){
+    var list = $('#yearlist')[0];
     var field = "<div class='col-sm-6 col-md-4 col-lg-3'>\
-                    <input id='"+ stud['id'] +"' type='checkbox' name='students' value='"+ stud['id'] +"'>\
-                    <label for='"+ stud['id'] +"'>"+ stud['last_name']+", "+ stud["first_name"] +"</label>\
+                    <input id='"+ year['id'] +"' type='radio' name='year' value='"+ year['id'] +"'>\
+                    <label for='"+ year['id'] +"'>"+ year['year_number']+", "+ year["division"] +"</label>\
                 </div>"
     list.innerHTML+=field
 }
+
+

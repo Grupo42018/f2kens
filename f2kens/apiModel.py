@@ -179,6 +179,7 @@ class APIModelSaveable(APIModel):
 
     def __init__(self, **kwargs):
         # set the api_id if it was given
+        self._api_id = None
         if ('id' in kwargs.keys()):
             self._api_id = kwargs['id']
         super().__init__(**kwargs)

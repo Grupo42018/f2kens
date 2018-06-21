@@ -7,7 +7,6 @@ from django.contrib.auth.decorators import login_required, permission_required
 
 from .models import *
 
-
 def create_f2(request):
     '''
     Esta vista se usa para crear F2. Se envia
@@ -18,18 +17,20 @@ def create_f2(request):
     print(preceptor)#Log in console
     # Temporary solution for preventing the return of Generators
     # Searches One ApiStudent Object filtered by dni
-    student = [x._api_id for x in ApiStudent.filter(dni=request.POST['dni'])][0]  # FIXME
-    date = request.POST['date'] # Get data by post
+    students = ApiStudent.filter(year=request.POST['year'])  # FIXME
     time = request.POST['time'] # Get data by post
     # Create the Form object
-    new_F2 = Formulario2(student=student, date=date, time=time, preceptor=preceptor)
-    new_F2.save() # Save the F2 object
-    print(new_F2) # Log the created object
+    to_users = []
+    for student in students:
+        new_F2 = Formulario2(student=student._api_id, time=time, preceptor=preceptor)
+        new_F2.save() # Save the F2 object
+        parents = Parent.filter_model(childs=student)
+        for i in parents:
+            to_users.append(i.user.email)
+
     subject = "F2KENS: Nuevo formulario de alumno"
-    #message = "<h3 style='color:green'>Un alumno espera su confirmacion para retirarse</h3><br><button>CONFIRMAR</button><button>RECHAZAR</button>"
     message = '127.0.0.1:8000/get_f2/'
     from_user = 'f2kens@gmail.com'
-    to_users = ['f2kens@gmail.com']
     send_mail(
         subject,
         message,
@@ -54,13 +55,31 @@ def update_f2_state(request, form2_id):
         return HttpResponse('FORMULARIO PUESTO EN ESPERA')
 
 
-def get_students(request):
+def get_years(request):
+    if request.user.is_authenticated:
+        return get_year_loged(request)
+    return get_year_unloged(request)
+
+
+def get_year_unloged(request):
     a = []
-    for i in ApiStudent.get_all():
+    for i in ApiYear.get_all():
         a.append({
             'id': i._api_id,
             'first_name': i.first_name,
             'last_name': i.last_name,
             'year': str(i.year)
+            })
+    return JsonResponse(a, safe=False)
+
+
+def get_year_loged(request):
+    a = []
+    prec = Preceptor.objects.get(user=request.user)
+    for i in prec.model.year:
+        a.append({
+            'id': i._api_id,
+            'division': i.division,
+            'year_number': i.year_number,
             })
     return JsonResponse(a, safe=False)

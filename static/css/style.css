@@ -28,8 +28,9 @@ a.bg-secondary.active {
     border-width: 2px;
     border-color: #888888AA;
     border-radius: 5px;
+    padding: 1rem;
 }
 
-#student-filter-f2 {
+#year-filter-f2 {
     margin-bottom: 1rem;
 }

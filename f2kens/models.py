@@ -45,6 +45,7 @@ class ApiParent(apiModel.APIModel):
     first_name = apiModel.Field(str)
     last_name = apiModel.Field(str)
     email = apiModel.Field(str)
+    childs = apiModel.Field(ApiStudent, is_array=True)
 
 
 class ApiRegistro(apiModel.APIModel):
@@ -68,11 +69,30 @@ class Preceptor(models.Model):
     model=apiModel.ApiField(ApiPreceptor, unique=True)
     user=models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
+    @classmethod
+    def get_filter(cls, **kwargs):
+        for i in cls.objects.all():
+            for key in kwargs.keys():
+                if kwargs[key] != getattr(i.model, key):
+                    continue
+            yield i
+
+    def __str__(self):
+        return "{model.last_name}, {model.first_name}".format(model=self.model)
+
 
 class Parent(models.Model):
     model = apiModel.ApiField(ApiParent, unique=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
+    @classmethod
+    def filter_model(cls, **kwargs):
+        for i in cls.objects.all():
+            for key in kwargs.keys():
+                if kwargs[key] != getattr(i.model, key):
+                    continue
+            yield i
+            
 
 class Device(models.Model):
     token = models.CharField(max_length=128)
