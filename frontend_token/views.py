@@ -1,13 +1,12 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+from django.shortcuts import render, redirect
+from f2kens.models import *
 
-from django.shortcuts import render
-from controlAsistencia.models import *
-from controlAsistencia.views import *
 # Create your views here.
 
+"""
 def index(request):
 	return render(request, 'login.html')
+"""
 
 def renderIndexDirector(request):
 	context = {}
@@ -26,3 +25,17 @@ def renderIndexDirector(request):
 def modalpre(request):
 	return render(request, 'modalpre.html')
 
+def index(request):
+	return render(request, 'preceptor.html')
+
+def index_preceptor(request):
+	context = {}
+	context['formularios'] = Formulario2.objects.all()
+	context['preceptores'] = Preceptor.objects.all()
+	context['students'] = ApiStudent.get_all()
+	return render(request, 'preceptor.html', context)
+
+def get_forms2(request):
+	context = {}
+	context['formularios2'] = Formulario2.objects.all()
+	return render(request, 'stateF2.html', context)

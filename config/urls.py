@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 """f2kens URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
@@ -14,14 +15,14 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.urls import path
+=======
+from django.urls import path, include
+>>>>>>> develop
 from django.contrib import admin
-#Import views from f2kens app
-from f2kens.views import *
-from frontend_token.views import *
 
-#TODO: Testear urls
-#TODO: Documentar
-#TODO: Agregar parametros a urls
+from f2kens.views import *
+from frontend_token import urls
+from frontend_token.views import *
 
 #URLS
 urlpatterns = [
@@ -79,4 +80,9 @@ urlpatterns = [
 
     #director
     path('', modalpre, name="modalpre")
+
+    path("", include(urls.urlpatterns)),
+    #Indexes
+    path('create_f2/', create_f2, name='create_f2'),
+    path('update_f2_state/form_id_<int:form2_id>/', update_f2_state, name='estado_f2')
 ]
