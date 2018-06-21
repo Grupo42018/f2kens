@@ -5,6 +5,7 @@ from f2kens.models import *
 
 def index_director(request):
 	context = {}
+	"""
 	context['preceptores'] = Preceptor.objects.all()
 	context['dispositivos'] = Device.objects.all()
 	context['directores'] = Director.objects.all()
@@ -15,7 +16,8 @@ def index_director(request):
 	context['cursos_auxiliares'] = Curso_aux.objects.all()
 	context['formularios2'] = Form2.objects.all()
 	context['formularios3'] = Form3.objects.all()
-	return render(request, 'test/directorTEST.html', context)
+	"""
+	return render(request, 'director.html', context)
 
 def modalpre(request):
 	return render(request, 'modalpre.html')
