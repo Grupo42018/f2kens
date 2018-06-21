@@ -1,5 +1,6 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 import json
-
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from django.core.mail import send_mail, send_mass_mail, EmailMessage

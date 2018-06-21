@@ -3,6 +3,7 @@
 <html>
 {% load staticfiles %}
 <head>
+	<meta charset='utf-8'>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" type="text/css" href="{% static 'css/login_style.css' %}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -10,24 +11,26 @@
 
 <body>
 
-	<form action="">
+	<form action="" method="POST">
 		<div class="imgcontainer">
 			<i class="fa fa-user" id="avatar"></i>
 		</div>
 
 		<div class="container">
-			<label for="uname" class="label"><b>Username</b></label>
-			<input class="input" type="text" placeholder="Enter Username" name="uname" required>
+			<form>
+				{% csrf_token %}
+				<label for="uname" class="label"><b>Usuario</b></label>
+				<input class="input" type="text" placeholder="Ingrese su usuario" name="username" required>
 
-			<label for="psw" class="label"><b>Password</b></label>
-			<input class="input" type="password" placeholder="Enter Password" name="psw" required>
-			<button type="submit">Login</button>
-			<label>
-				<input type="checkbox" checked="checked" name="remember"> Remember me
-			</label>
+				<label for="psw" class="label"><b>Contraseña</b></label>
+				<input class="input" type="password" placeholder="Ingrese su contraseña" name="password" required>
+				<button type="submit">Login</button>
+			</form>
 		</div>    
 	</form>
-
+	{% if form.errors %}
+		<h1 style='color:red;text-align:center'>Error al ingresar. Compruebe sus datos nuevamente.</h2>
+	{% endif %}
 </body>
 </html>
 
