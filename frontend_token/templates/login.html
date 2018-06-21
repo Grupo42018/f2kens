@@ -3,6 +3,7 @@
 <html>
 {% load staticfiles %}
 <head>
+	<meta charset='utf-8'>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" type="text/css" href="{% static 'css/login_style.css' %}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -18,11 +19,11 @@
 		<div class="container">
 			<form>
 				{% csrf_token %}
-				<label for="uname" class="label"><b>Username</b></label>
-				<input class="input" type="text" placeholder="Enter Username" name="username" required>
+				<label for="uname" class="label"><b>Usuario</b></label>
+				<input class="input" type="text" placeholder="Ingrese su usuario" name="username" required>
 
-				<label for="psw" class="label"><b>Password</b></label>
-				<input class="input" type="password" placeholder="Enter Password" name="password" required>
+				<label for="psw" class="label"><b>Contraseña</b></label>
+				<input class="input" type="password" placeholder="Ingrese su contraseña" name="password" required>
 				<button type="submit">Login</button>
 			</form>
 		</div>    
