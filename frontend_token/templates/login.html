@@ -16,15 +16,20 @@
 		</div>
 
 		<div class="container">
-			<label for="uname" class="label"><b>Username</b></label>
-			<input class="input" type="text" placeholder="Enter Username" name="uname" required>
+			<form>
+				{% csrf_token %}
+				<label for="uname" class="label"><b>Username</b></label>
+				<input class="input" type="text" placeholder="Enter Username" name="username" required>
 
-			<label for="psw" class="label"><b>Password</b></label>
-			<input class="input" type="password" placeholder="Enter Password" name="psw" required>
-			<button type="submit">Login</button>	
+				<label for="psw" class="label"><b>Password</b></label>
+				<input class="input" type="password" placeholder="Enter Password" name="password" required>
+				<button type="submit">Login</button>
+			</form>
 		</div>    
 	</form>
-
+	{% if form.errors %}
+		<h1 style='color:red;text-align:center'>Error al ingresar. Compruebe sus datos nuevamente.</h2>
+	{% endif %}
 </body>
 </html>
 
