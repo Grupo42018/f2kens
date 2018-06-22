@@ -32,7 +32,13 @@ def index_preceptor(request):
 	context['students'] = ApiStudent.get_all()
 	return render(request, 'preceptor.html', context)
 
-def get_forms2(request):
+def index_tutor(request):
+	pass
+
+def index_guard(request):
+	pass
+
+def get_forms2(request, tutor_id):
 	context = {}
 	context['formularios2'] = Formulario2.objects.all()
 	return render(request, 'stateF2.html', context)
