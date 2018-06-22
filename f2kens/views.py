@@ -15,7 +15,6 @@ def create_f2(request):
     '''
     # Get preceptor by logged user
     preceptor = Preceptor.objects.get(user=request.user)
-    print(preceptor)#Log in console
     # Temporary solution for preventing the return of Generators
     # Searches One ApiStudent Object filtered by dni
     students = ApiStudent.filter(year=request.POST['year'])  # FIXME

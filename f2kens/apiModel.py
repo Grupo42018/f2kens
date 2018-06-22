@@ -71,6 +71,12 @@ class APIModel(object):
         else:
             return self._parent._check_copy(copy_id, cls)
 
+    def __eq__(self, other):
+        return self._api_id == other._api_id
+
+    def __str__(self):
+        return str(self._api_id)
+
     @classmethod
     def get_all(cls):
         """get_all
@@ -285,7 +291,7 @@ class ApiField(models.Field):
     def from_db_value(self, value, expression, connection):
         if value is None:
             return value
-        return self.class_.get(rid=value)
+        return self.class_.get(id=value)
 
     def to_python(self, value):
         if isinstance(value, APIModel):
@@ -294,7 +300,7 @@ class ApiField(models.Field):
         if value is None:
             return value
 
-        return self.class_.get(rid=value)
+        return self.class_.get(id=value)
 
     def get_internal_type(self):
         return "IntegerField"
