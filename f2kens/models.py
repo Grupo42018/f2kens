@@ -70,12 +70,15 @@ class Preceptor(models.Model):
     user=models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     @classmethod
-    def get_filter(cls, **kwargs):
+    def filter_model(cls, **kwargs):
         for i in cls.objects.all():
+            comp = True
             for key in kwargs.keys():
                 if kwargs[key] != getattr(i.model, key):
+                    comp = False
                     continue
-            yield i
+            if comp:
+                yield i
 
     def __str__(self):
         return "{model.last_name}, {model.first_name}".format(model=self.model)
@@ -88,10 +91,13 @@ class Parent(models.Model):
     @classmethod
     def filter_model(cls, **kwargs):
         for i in cls.objects.all():
+            comp = True
             for key in kwargs.keys():
-                if kwargs[key] != getattr(i.model, key):
+                if kwargs[key] not in getattr(i.model, key):
+                    comp = False
                     continue
-            yield i
+            if comp:
+                yield i
             
 
 class Device(models.Model):
