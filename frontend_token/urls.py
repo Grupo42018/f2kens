@@ -12,6 +12,6 @@ urlpatterns = [
     path('director/', index_director, name="index_director"),
     path('tutor/', index_tutor, name='index_tutor'),
     path('guard/', index_guard, name='index_guard'),
-    path('get_f2/', get_forms2, name='get_f2'),
+    path('get_f2/<tutor_id>', get_forms2, name='get_f2'),
     path('modal_preceptor/', modalpre, name="modalpre")
 ]
