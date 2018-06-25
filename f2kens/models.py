@@ -1,9 +1,11 @@
 import datetime
+import time
+import hashlib
 
 from django.db import models
 from django.conf import settings
 
-from . import apiModel
+from .utils import apiModel, tokens
 
 
 F2_STATES = [
@@ -102,9 +104,13 @@ class Parent(models.Model):
             
 
 class Device(models.Model):
-    token = models.CharField(max_length=128)
+    token = models.CharField(max_length=128, editable=False)
+#    algorithm = models.CharField(max_length=8)
     parent = models.ForeignKey(Parent, on_delete=models.CASCADE)
 
+    def save(self, device_hash, *args, **kwargs):
+        self.token = tokens.generate_token(device_hash)
+        super().save(*args, **kwargs)
 
 class Formulario(models.Model):
     student = apiModel.ApiField(ApiStudent)

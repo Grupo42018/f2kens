@@ -6,7 +6,7 @@ from django.http import HttpResponse, JsonResponse
 from django.core.mail import send_mail, send_mass_mail, EmailMessage
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 from .models import *
-from .apiModel import *
+from .utils.apiModel import *
 
 def check_user_group_before_login(request):
     '''
@@ -64,8 +64,8 @@ def create_f2(request):
 def update_f2_state(request, form2_id):
     get_form2 = Formulario2.objects.get(id=form2_id)
     get_state = request.POST['estado']
-    if get_state == 'Aceptado':
-        get_form2.state = 'Aceptado'
+    if get_state == 'Aprobado':
+        get_form2.state = 'Aprobado'
         get_form2.save()
         return HttpResponse('FORMULARIO ACEPTADO')
     elif get_state == 'Rechazado':
@@ -78,7 +78,7 @@ def update_f2_state(request, form2_id):
 
 def get_f2s(request):
     if request.user.is_authenticated:
-        query = Formulario2.objects.filter(preceptor__user=request.user)
+        query = Formulario2.objects.filter(preceptor__user=request.user, date=datetime.date.today())
     else:
         query = Formulario2.objects.all()
 
@@ -89,7 +89,8 @@ def get_f2s(request):
             'student': {
                 "first_name": i.student.first_name, 
                 "last_name": i.student.last_name,
-                "list_number": i.student.list_number},
+                "list_number": i.student.list_number,
+                "year": str(i.student.year)},
             'date': i.date,
             'time': i.time,
             'motivo': i.motivo,
