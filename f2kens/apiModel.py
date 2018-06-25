@@ -306,10 +306,10 @@ class ApiField(models.Field):
         return "IntegerField"
 
     def get_prep_value(self, value):
-        if isinstance(value, self.class_):
+        if not isinstance(value, self.class_):
             raise AttributeError(
-                "The value passed is a {type} instead of APIModel".format(
-                    type=value.__class__))
+                "The value passed is a {type} instead of {need}".format(
+                    type=value.__class__, need=self.class_))
         return value._api_id
 
     def deconstruct(self):

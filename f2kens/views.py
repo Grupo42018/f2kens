@@ -13,12 +13,20 @@ def check_user_group_before_login(request):
     Esta vista busca si el usuario pertenece a un grupo de usuario
     especifico y lo redirecciona a su correspondiente url.
     '''
-    if request.user.groups.filter(name='Directors').exists(): return redirect('index_director')
-    elif request.user.groups.filter(name='Preceptors').exists(): return redirect('index_preceptor')
-    elif request.user.groups.filter(name='Tutors').exists(): return redirect('index_tutor')
-    elif request.user.groups.filter(name='Guards').exists(): return redirect('index_guard')
+    if request.user.groups.filter(name='Directors').exists(): 
+        return redirect('index_director')
+
+    elif request.user.groups.filter(name='Preceptors').exists(): 
+        return redirect('index_preceptor')
+    
+    elif request.user.groups.filter(name='Tutors').exists(): 
+        return redirect('index_tutor')
+    
+    elif request.user.groups.filter(name='Guards').exists(): 
+        return redirect('index_guard')
+    
     else:
-        redirect('login')
+        return redirect('login')
 
 def create_f2(request):
     '''
