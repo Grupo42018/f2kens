@@ -1,12 +1,13 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
 import json
+import datetime
+
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from django.core.mail import send_mail, send_mass_mail, EmailMessage
 from django.contrib.auth.decorators import login_required, permission_required
 
 from .models import *
+from .apiModel import *
 
 def create_f2(request):
     '''
@@ -19,10 +20,11 @@ def create_f2(request):
     # Searches One ApiStudent Object filtered by dni
     students = ApiStudent.filter(year=request.POST['year'])  # FIXME
     time = request.POST['time'] # Get data by post
+    motive = request.POST['reason']
     # Create the Form object
     to_users = []
     for student in students:
-        new_F2 = Formulario2(student=student._api_id, time=time, preceptor=preceptor)
+        new_F2 = Formulario2(student=student, time=time, preceptor=preceptor, motivo=motive)
         new_F2.save() # Save the F2 object
         parents = Parent.filter_model(childs=student)
         for i in parents:
@@ -55,28 +57,37 @@ def update_f2_state(request, form2_id):
         return HttpResponse('FORMULARIO PUESTO EN ESPERA')
 
 
-def get_years(request):
+def get_f2s(request):
     if request.user.is_authenticated:
-        return get_year_loged(request)
-    return get_year_unloged(request)
+        query = Formulario2.objects.filter(preceptor__user=request.user)
+    else:
+        query = Formulario2.objects.all()
 
-
-def get_year_unloged(request):
-    a = []
-    for i in ApiYear.get_all():
+    a=[]
+    for i in query:
         a.append({
-            'id': i._api_id,
-            'first_name': i.first_name,
-            'last_name': i.last_name,
-            'year': str(i.year)
+            'id': i.id,
+            'student': {
+                "first_name": i.student.first_name, 
+                "last_name": i.student.last_name,
+                "list_number": i.student.list_number},
+            'date': i.date,
+            'time': i.time,
+            'motivo': i.motivo,
+            'state': i.state,
             })
     return JsonResponse(a, safe=False)
 
 
-def get_year_loged(request):
-    a = []
-    prec = Preceptor.objects.get(user=request.user)
-    for i in prec.model.year:
+def get_years(request):
+    query = None
+    if request.user.is_authenticated:
+        query = Preceptor.objects.get(user=request.user).model.year
+    else:
+        query = ApiYear.get_all()
+        
+    a=[]
+    for i in query:
         a.append({
             'id': i._api_id,
             'division': i.division,

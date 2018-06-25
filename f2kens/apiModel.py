@@ -12,7 +12,6 @@ from django.db import models
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
-
 class APIModel(object):
     """API Model Manager
 
@@ -72,6 +71,8 @@ class APIModel(object):
             return self._parent._check_copy(copy_id, cls)
 
     def __eq__(self, other):
+        if other is not self.__class__:
+            return False
         return self._api_id == other._api_id
 
     def __str__(self):
@@ -122,7 +123,6 @@ class APIModel(object):
 
         for obj in json.load(cls._request(urlattr=urlattr[:-1])):
             new = cls(**obj)
-            new._api_id = obj['id']
             yield new
 
     @classmethod
@@ -306,6 +306,10 @@ class ApiField(models.Field):
         return "IntegerField"
 
     def get_prep_value(self, value):
+        if isinstance(value, self.class_):
+            raise AttributeError(
+                "The value passed is a {type} instead of APIModel".format(
+                    type=value.__class__))
         return value._api_id
 
     def deconstruct(self):

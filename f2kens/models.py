@@ -36,6 +36,7 @@ class ApiStudent(apiModel.APIModel):
     last_name = apiModel.Field(str)
     dni = apiModel.Field(int)
     student_tag = apiModel.Field(int)
+    list_number = apiModel.Field(int)
     status = apiModel.Field(int)
     year = apiModel.Field(ApiYear)
 
@@ -106,10 +107,11 @@ class Device(models.Model):
 
 
 class Formulario(models.Model):
-    student = models.IntegerField()
+    student = apiModel.ApiField(ApiStudent)
     date = models.DateField(auto_now=True)
     time = models.TimeField()
     preceptor = models.ForeignKey(Preceptor,on_delete=models.DO_NOTHING)
+    motivo = models.CharField(max_length=300)
 
     class Meta:
         abstract=True
@@ -124,7 +126,6 @@ class Formulario(models.Model):
             prec=self.preceptor)
 
 class Formulario2(Formulario):      ###clase formulario 2
-    motivo_docente = models.CharField(max_length=300)
     state = models.CharField(
         max_length=50,
         choices=F2_STATES,
@@ -139,7 +140,6 @@ class Formulario2(Formulario):      ###clase formulario 2
         return "{name} {old}".format(name=self.Meta.verbose_name, old=basestr)
 
 class Formulario3(Formulario):      ###clase formulario 3
-    motivo_alumno = models.CharField(max_length=300)
 
     class Meta:
         verbose_name = 'F3'
