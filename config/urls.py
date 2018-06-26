@@ -10,6 +10,9 @@ urlpatterns = [
     #Django admin
     path('admin/', admin.site.urls),
 
+    #Django oauth
+    path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
+
     #Front end urls
     path('', include(fronturls.urlpatterns)),
     

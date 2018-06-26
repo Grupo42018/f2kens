@@ -2,8 +2,9 @@ import datetime
 
 from django.db import models
 from django.conf import settings
+from oauth2_provider import models as tokens
 
-from . import apiModel
+from .utils import apiModel
 
 
 F2_STATES = [
@@ -102,15 +103,15 @@ class Parent(models.Model):
             
 
 class Device(models.Model):
-    token = models.CharField(max_length=128)
-    parent = models.ForeignKey(Parent, on_delete=models.CASCADE)
+    token = models.ForeignKey(tokens.Application, on_delete=models.PROTECT)
+    parent = models.OneToOneField(Parent, related_name="device", on_delete=models.CASCADE)
 
 
 class Formulario(models.Model):
     student = apiModel.ApiField(ApiStudent)
     date = models.DateField(auto_now=True)
     time = models.TimeField()
-    preceptor = models.ForeignKey(Preceptor,on_delete=models.DO_NOTHING)
+    preceptor = models.ForeignKey(Preceptor, on_delete=models.DO_NOTHING)
     motivo = models.CharField(max_length=300)
 
     class Meta:

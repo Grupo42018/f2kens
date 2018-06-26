@@ -6,7 +6,7 @@ from django.http import HttpResponse, JsonResponse
 from django.core.mail import send_mail, send_mass_mail, EmailMessage
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 from .models import *
-from .apiModel import *
+from .utils.apiModel import *
 
 def check_user_group_before_login(request):
     '''
