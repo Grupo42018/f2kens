@@ -4,7 +4,7 @@ import datetime
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from django.core.mail import send_mail, send_mass_mail, EmailMessage
-from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
+from django.contrib.auth.decorators import *
 from .models import *
 from .apiModel import *
 

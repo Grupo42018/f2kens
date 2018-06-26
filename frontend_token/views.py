@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from f2kens.models import *
+from django.contrib.auth.decorators import *
 
 # Create your views here.
 
@@ -33,12 +34,16 @@ def index_preceptor(request):
 	return render(request, 'preceptor.html', context)
 
 def index_tutor(request):
-	pass
+	return render(request, 'tutor.html')
 
 def index_guard(request):
-	pass
+	return render(request, 'guard.html')
 
-def get_forms2(request, tutor_id):
-	context = {}
-	context['formularios2'] = Formulario2.objects.all()
-	return render(request, 'stateF2.html', context)
+def get_forms2(request):
+	if request.user.groups.filter(name='Tutors').exists():
+		parent = Parent.objects.get(user=request.user)
+		for student in parent.model.childs:
+			get_forms2 = Formulario2.objects.filter(student=student)
+		return render(request, 'stateF2.html', {'formularios2': get_forms2})
+	else:
+		return redirect('login')
