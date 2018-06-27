@@ -79,5 +79,9 @@ urlpatterns = [
     url(r'^d-AuxCourse/', deleteAuxiliarCourse, name="delete_auxCourse"),
 
     #Index
-    url(r'^$', index)
+    url(r'^$', index),
+    url(r'^user/new/$', createUser, name='createUser'),
+    url(r'^probando/$', base),
+    url(r'^registrar',RegistroUsuario.as_view(), name="registrar")
+
 ]

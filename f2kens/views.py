@@ -3,6 +3,12 @@ from __future__ import unicode_literals
 
 from django.shortcuts import render
 from . import models
+from .forms import userForm
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
+from django.views.generic import CreateView
+from django.urls import reverse_lazy
+
 
 ### ===> TAREAS:
 #TODO: Testear y documentar las vistas
@@ -482,3 +488,17 @@ def deleteAuxiliarCourse(request, auxCourse_id):
     except:
         #HttpResponse solo para testear
         return HttpResponse("Error al eliminar el curso auxiliar")
+
+
+def createUser(request):
+    form = userForm()
+    return render(request, 'form.html', {'form': form})
+
+def base(request):
+    return render(request, 'base.html')
+
+class RegistroUsuario(CreateView):
+    model = User
+    template_name = "form.html"
+    form_class = UserCreationForm
+    succes_url = 'index'
