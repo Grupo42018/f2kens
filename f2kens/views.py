@@ -50,7 +50,7 @@ def create_f2(request):
             to_users.append(i.user.email)
 
     subject = "F2KENS: Nuevo formulario de alumno"
-    message = '127.0.0.1:8000/get_f2/'
+    message = '127.0.0.1:8000/tutor/'
     from_user = 'f2kens@gmail.com'
     send_mail(
         subject,
@@ -64,16 +64,16 @@ def create_f2(request):
 def update_f2_state(request, form2_id):
     get_form2 = Formulario2.objects.get(id=form2_id)
     get_state = request.POST['estado']
-    if get_state == 'Aceptado':
-        get_form2.state = 'Aceptado'
+    if get_state == 'Aprobado':
+        get_form2.state = 'Aprobado'
         get_form2.save()
-        return HttpResponse('FORMULARIO ACEPTADO')
+        return redirect('index_tutor')
     elif get_state == 'Rechazado':
         get_form2.state = 'Rechazado'
         get_form2.save()
-        return HttpResponse('FORMULARIO RECHAZADO')
+        return redirect('index_tutor')
     else:
-        return HttpResponse('FORMULARIO PUESTO EN ESPERA')
+        return redirect('index_tutor')
 
 
 def get_f2s(request):
