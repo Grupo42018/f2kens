@@ -16,5 +16,5 @@ urlpatterns = [
     path('modal_preceptor/', views.modalpre, name="modalpre"),
     path('user/new/', f2kens.createUser, name='createUser'),
     path('probando/', f2kens.base),
-	path('registrar/',f2kens.RegistroUsuario.as_view(), name="registrar")
 ]
+	

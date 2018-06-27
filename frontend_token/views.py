@@ -46,3 +46,10 @@ def index_tutor(request):
 		return render(request, 'tutor.html', {'formularios2': get_forms2})
 	else:
 		return redirect('login')
+
+def createUser(request):
+    form = userForm()
+    return render(request, 'form.html', {'form': form})
+
+def base(request):
+    return render(request, 'base.html')

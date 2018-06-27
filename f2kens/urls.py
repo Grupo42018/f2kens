@@ -8,4 +8,5 @@ urlpatterns = [
     path('update_f2_state/form_id_<int:form2_id>/', update_f2_state, name='estado_f2'),
     path('get_f2s/', get_f2s, name="get_f2s"),
     path('get_years/', get_years, name="get_years"),
+    path('registrar/', RegistroUsuario.as_view(), name="registrar")
 ]

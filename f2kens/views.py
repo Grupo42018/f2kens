@@ -118,12 +118,6 @@ def get_years(request):
             })
     return JsonResponse(a, safe=False)
 
-def createUser(request):
-    form = userForm()
-    return render(request, 'form.html', {'form': form})
-
-def base(request):
-    return render(request, 'base.html')
 
 class RegistroUsuario(CreateView):
     model = User
