@@ -38,7 +38,7 @@ function add_f2_card(f2){
             break;
     }
 
-    var card_template = "<div class=col-md-3 col-sm-10>\
+    var card_template = "<div class='col-md-3 col-sm-10'>\
                           <div class='card text-white bg-"+stateColor+"' style='margin-bottom:20px'>\
                             <div class='card-header'>"+f2["state"]+"</div>\
                             <div class='card-body'>\
