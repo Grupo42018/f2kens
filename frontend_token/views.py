@@ -1,6 +1,8 @@
+
 from django.shortcuts import render, redirect
-from f2kens.models import *
 from django.contrib.auth.decorators import *
+from django.utils import timezone
+from f2kens.models import *
 
 # Create your views here.
 
@@ -40,7 +42,7 @@ def index_tutor(request):
 	if request.user.groups.filter(name='Tutors').exists():
 		parent = Parent.objects.get(user=request.user)
 		for student in parent.model.childs:
-			get_forms2 = Formulario2.objects.filter(student=student)
+			get_forms2 = Formulario2.objects.filter(student=student, date=timezone.now().date())
 		return render(request, 'tutor.html', {'formularios2': get_forms2})
 	else:
 		return redirect('login')
