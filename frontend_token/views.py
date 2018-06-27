@@ -33,17 +33,14 @@ def index_preceptor(request):
 	context['students'] = ApiStudent.get_all()
 	return render(request, 'preceptor.html', context)
 
-def index_tutor(request):
-	return render(request, 'tutor.html')
-
 def index_guard(request):
 	return render(request, 'guard.html')
 
-def get_forms2(request):
+def index_tutor(request):
 	if request.user.groups.filter(name='Tutors').exists():
 		parent = Parent.objects.get(user=request.user)
 		for student in parent.model.childs:
 			get_forms2 = Formulario2.objects.filter(student=student)
-		return render(request, 'stateF2.html', {'formularios2': get_forms2})
+		return render(request, 'tutor.html', {'formularios2': get_forms2})
 	else:
 		return redirect('login')
