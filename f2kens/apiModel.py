@@ -2,6 +2,8 @@
 from __future__ import unicode_literals
 from django.conf import settings
 from django.utils import encoding
+from django.db import models
+from django.utils.translation import gettext_lazy as _
 import http.client as http
 import json
 import socket
@@ -55,6 +57,19 @@ class ApiModel(object):
             return self
         else:
             return self._parent._check_copy(copy_id, cls)
+
+    @classmethod
+    def get(cls, **kwargs):
+        urlattr = "?"
+        for x in kwargs.keys():
+            urlattr += "{}={}&".format(x, kwargs[x])
+
+        for obj in json.load(cls._request(urlattr=urlattr[:-1])):
+            new = cls(**obj)
+            new._api_id = obj['id']
+            return new
+        raise AttributeError("The request returned None")
+
 
     @classmethod
     def getAll(cls):
@@ -180,3 +195,46 @@ class Field(object):
                 return attr
             else:
                 return self.cls(data, *self.args)
+
+
+class ApiField(models.Field):
+
+    description = _("ApiIdentifier")
+
+    def __init__(self, apicls, *args, **kwargs):
+        self.apicls = apicls
+        super().__init__(*args, **kwargs)
+
+    def from_db_value(self, value, expression, connection):
+        if value is None:
+            return value
+        return self.apicls.get(rid=value)
+
+    def to_python(self):
+        if isinstance(value, ApiModel):
+            return value
+
+        if value is None:
+            return value
+
+        return self.apicls.get(rid=value)
+
+    def get_internal_type(self):
+        return "IntegerField"
+
+    def get_prep_value(self, value):
+        return value._api_id
+
+    def deconstruct(self):
+        name, path, args, kwargs = super().deconstruct()
+        kwargs['apicls'] = self.apicls
+        return name, path, args, kwargs
+
+    def formfield(self, **kwargs):
+        return super().formfield(**{
+            'form_class': forms.IntegerField,
+            **kwargs,
+    })
+
+    def db_type(self, connection):
+        return 'INTEGER'
