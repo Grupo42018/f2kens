@@ -2,13 +2,12 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import *
 from django.utils import timezone
-from f2kens.models import *
 from django.contrib.auth.models import Group, User
 from django.contrib.auth.forms import UserCreationForm
 from django.views.generic import CreateView
 from django.urls import reverse_lazy
 
-# Create your views here.
+from f2kens.models import *
 
 def index_director(request):
 	return render(request, 'director.html')
