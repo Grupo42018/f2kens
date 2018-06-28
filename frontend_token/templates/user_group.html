@@ -25,19 +25,12 @@
   <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-primary">
       <div class="container">
-        <a class="navbar-brand" href="{% url 'check_user' %}"><i class="fa fa-user-secret"></i></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
 
         <div class="collapse navbar-collapse" id="navbar">
           <ul class="navbar-nav nav mr-auto">
-            <li class="nav-item active">
-              <a class="nav-link" href="#f2" data-toggle="tab">F2</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#f3" data-toggle="tab">F3</a>
-            </li>
             <li class="nav-item">
               <a class="nav-link" href="{% url 'logout' %}">Cerrar sesión</a>
             </li>
@@ -46,14 +39,13 @@
       </div>
     </nav>
 
-    <div class="jumbotron jumbotron-fluid">
-        <div class="container">
+    <main role="main" class="container">
+        <div class="jumbotron">
             <h1 class="display-4">Elije tu rol en el sistema</h1>
-            <p class="lead">
-                <div class="container">
-                    <div class="row">
-                        {% for user_group in user_groups %}
-                            <div class="col-sm">
+            <div class="container">
+                <div class="row">
+                    {% for user_group in user_groups %}
+                        <div class="col-12" style="margin-bottom: 15px">
                             {% if user_group.name == 'Directives' %}
                             <a class="btn btn-primary btn-lg" href='{% url "index_director" %}' role="button">Director</a>
                             {% elif user_group.name == 'Preceptors' %}
@@ -67,13 +59,11 @@
                                 Usted no esta asignado a un grupo de usuario. Contacte con el administrador.
                             </div>
                             {% endif %}
-                            </div>
-                        {% endfor %}
-                    </div>
+                        </div>
+                    {% endfor %}
                 </div>
-            </p>
+            </div>
         </div>
-    </div>
-
+    </main>
   </body>
 </html>
