@@ -3,6 +3,10 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import *
 from django.utils import timezone
 from f2kens.models import *
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
+from django.views.generic import CreateView
+from django.urls import reverse_lazy
 
 # Create your views here.
 
@@ -46,3 +50,17 @@ def index_tutor(request):
 		return render(request, 'tutor.html', {'formularios2': get_forms2})
 	else:
 		return redirect('login')
+
+def createUser(request):
+    form = userForm()
+    return render(request, 'form.html', {'form': form})
+
+def base(request):
+    return render(request, 'base.html')
+
+
+class RegistroUsuario(CreateView):
+    model = User
+    template_name = "form.html"
+    form_class = UserCreationForm
+    success_url = reverse_lazy('check_user')

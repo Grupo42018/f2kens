@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import *
 from .models import *
 from .utils.apiModel import *
 
+
 def check_user_group_before_login(request):
     '''
     Esta vista busca si el usuario pertenece a un grupo de usuario
@@ -113,3 +114,5 @@ def get_years(request):
             'year_number': i.year_number,
             })
     return JsonResponse(a, safe=False)
+
+
