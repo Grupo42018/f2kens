@@ -2,29 +2,15 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import *
 from django.utils import timezone
-from f2kens.models import *
-from django.contrib.auth.models import User
+from django.contrib.auth.models import Group, User
 from django.contrib.auth.forms import UserCreationForm
 from django.views.generic import CreateView
 from django.urls import reverse_lazy
 
-# Create your views here.
+from f2kens.models import *
 
 def index_director(request):
-	context = {}
-	"""
-	context['preceptores'] = Preceptor.objects.all()
-	context['dispositivos'] = Device.objects.all()
-	context['directores'] = Director.objects.all()
-	context['alumnos'] = Student.objects.all()
-	context['asistencias'] = Absence.objects.all()
-	context['tutores'] = Tutor.objects.all()
-	context['cursos'] = Curso.objects.all()
-	context['cursos_auxiliares'] = Curso_aux.objects.all()
-	context['formularios2'] = Form2.objects.all()
-	context['formularios3'] = Form3.objects.all()
-	"""
-	return render(request, 'director.html', context)
+	return render(request, 'director.html')
 
 def modalpre(request):
 	return render(request, 'modalpre.html')

@@ -7,6 +7,17 @@ from django.core.mail import send_mail, send_mass_mail, EmailMessage
 from django.contrib.auth.decorators import *
 from .models import *
 from .utils.apiModel import *
+from django.contrib.auth.models import Group, User
+
+# TODO: Actualizar documentación de las vistas.
+
+def select_user_group(request):
+	if request.user.is_authenticated:
+		#query_set = User.objects.filter(username=request.user, groups__name__in=Group.objects.all())
+		query_set = Group.objects.filter(user=request.user)
+	else:
+		return redirect('login')
+	return render(request, 'user_group.html', {'user_groups':query_set})
 
 
 def check_user_group_before_login(request):
@@ -14,18 +25,33 @@ def check_user_group_before_login(request):
     Esta vista busca si el usuario pertenece a un grupo de usuario
     especifico y lo redirecciona a su correspondiente url.
     '''
-    if request.user.groups.filter(name='Directors').exists(): 
-        return redirect('index_director')
+    if request.user.groups.all().count() == 1:
+        if request.user.groups.filter(name='Directives'):
+            return redirect('index_director')
+        if request.user.groups.filter(name='Preceptors'):
+            return redirect('index_preceptor')
+        if request.user.groups.filter(name='Tutors'):
+            return redirect('index_tutor')
+        if request.user.groups.filter(name='Guards'):
+            return redirect('index_guard')
+    elif request.user.groups.all().count() > 1:
+        return select_user_group(request)
+    else:
+        return redirect('login')
 
-    elif request.user.groups.filter(name='Preceptors').exists(): 
+def check_user_group_and_redirect(request):
+    '''
+    Esta vista busca si el usuario pertenece a un grupo de usuario
+    especifico y lo redirecciona a su correspondiente url.
+    '''
+    if request.user.groups.filter(name='Directives'):
+        return redirect('index_director')
+    if request.user.groups.filter(name='Preceptors'):
         return redirect('index_preceptor')
-    
-    elif request.user.groups.filter(name='Tutors').exists(): 
+    if request.user.groups.filter(name='Tutors'):
         return redirect('index_tutor')
-    
-    elif request.user.groups.filter(name='Guards').exists(): 
+    if request.user.groups.filter(name='Guards'):
         return redirect('index_guard')
-    
     else:
         return redirect('login')
 
