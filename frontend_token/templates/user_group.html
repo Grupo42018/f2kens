@@ -1,29 +1,69 @@
+<!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <title>Tutor</title>
-    </head>
-    <body>
-        <ul>
-            <h1 style='text-align:center'>
-                Primero debemos saber que rol cumples para redireccionarte 
-            </h1>
-            <li><a href='{% url "logout" %}'>Cerrar sesión</a></li>
-        </ul>
-        <div align='center' style='border-style:solid;'>
-            {% for user_group in user_groups %}
-                {% if user_group.name == 'Directives' %}
-                <a href='{% url "index_director" %}'>Director</a>
-                {% elif user_group.name == 'Preceptors' %}
-                <a href='{% url "index_preceptor" %}'>Preceptor</a>
-                {% elif user_group.name == 'Tutors' %}
-                <a href='{% url "index_tutor" %}'>Tutor</a>
-                {% elif user_group.name == 'Guards' %}
-                <a href='{% url "index_guard" %}'>Guardia</a>
-                {% else %}
-                <h1 style='color:red'>Usted no pertenece a un grupo. Contacte con el administrador.</h1>
-                {% endif %}
-            {% endfor %}
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% load static %}
+    <title>Grupos de usuario</title>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="{% static 'font-awesome/css/font-awesome.min.css' %}">
+
+    <!-- Bootstrap links -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+
+    <!-- link custom css -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+
+    <!-- import custom script -->
+    <script src="{% static 'js/functions.js' %}" type="text/javascript"></script>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-primary">
+      <div class="container">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbar">
+          <ul class="navbar-nav nav mr-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'logout' %}">Cerrar sesión</a>
+            </li>
+          </ul>
         </div>
-    </body>
+      </div>
+    </nav>
+
+    <main role="main" class="container">
+        <div class="jumbotron">
+            <h1 class="display-4">Elije tu rol en el sistema</h1>
+            <div class="container">
+                <div class="row">
+                    {% for user_group in user_groups %}
+                        <div class="col-12" style="margin-bottom: 15px">
+                            {% if user_group.name == 'Directives' %}
+                            <a class="btn btn-primary btn-lg" href='{% url "index_director" %}' role="button">Director</a>
+                            {% elif user_group.name == 'Preceptors' %}
+                            <a class="btn btn-primary btn-lg" href='{% url "index_preceptor" %}' role="button">Preceptor</a>
+                            {% elif user_group.name == 'Tutors' %}
+                            <a class="btn btn-primary btn-lg" href='{% url "index_tutor" %}' role="button">Tutor</a>
+                            {% elif user_group.name == 'Guards' %}
+                            <a class="btn btn-primary btn-lg" href='{% url "index_guard" %}' role="button">Guardia</a>
+                            {% else %}
+                            <div class="alert alert-danger" role="alert">
+                                Usted no esta asignado a un grupo de usuario. Contacte con el administrador.
+                            </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </main>
+  </body>
 </html>
