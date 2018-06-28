@@ -1,0 +1,29 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Tutor</title>
+    </head>
+    <body>
+        <ul>
+            <h1 style='text-align:center'>
+                Primero debemos saber que rol cumples para redireccionarte 
+            </h1>
+            <li><a href='{% url "logout" %}'>Cerrar sesión</a></li>
+        </ul>
+        <div align='center' style='border-style:solid;'>
+            {% for user_group in user_groups %}
+                {% if user_group.name == 'Directives' %}
+                <a href='{% url "index_director" %}'>Director</a>
+                {% elif user_group.name == 'Preceptors' %}
+                <a href='{% url "index_preceptor" %}'>Preceptor</a>
+                {% elif user_group.name == 'Tutors' %}
+                <a href='{% url "index_tutor" %}'>Tutor</a>
+                {% elif user_group.name == 'Guards' %}
+                <a href='{% url "index_guard" %}'>Guardia</a>
+                {% else %}
+                <h1 style='color:red'>Usted no pertenece a un grupo. Contacte con el administrador.</h1>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </body>
+</html>
