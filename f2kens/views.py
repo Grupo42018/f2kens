@@ -19,6 +19,7 @@ def select_user_group(request):
 		return redirect('login')
 	return render(request, 'user_group.html', {'user_groups':query_set})
 
+
 def check_user_group_before_login(request):
     '''
     Esta vista busca si el usuario pertenece a un grupo de usuario
@@ -139,3 +140,5 @@ def get_years(request):
             'year_number': i.year_number,
             })
     return JsonResponse(a, safe=False)
+
+
