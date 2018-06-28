@@ -14,8 +14,8 @@ urlpatterns = [
     path('tutor/', views.index_tutor, name='index_tutor'),
     path('guard/', views.index_guard, name='index_guard'),
     path('modal_preceptor/', views.modalpre, name="modalpre"),
-    path('user/new/', f2kens.createUser, name='createUser'),
-    path('probando/', f2kens.base),
+    path('user/new/', views.createUser, name='createUser'),
+    path('probando/', views.base),
     path('registrar/', views.RegistroUsuario.as_view(), name="registrar")
 ]
 	

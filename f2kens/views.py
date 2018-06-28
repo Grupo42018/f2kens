@@ -7,10 +7,7 @@ from django.core.mail import send_mail, send_mass_mail, EmailMessage
 from django.contrib.auth.decorators import *
 from .models import *
 from .utils.apiModel import *
-from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm
-from django.views.generic import CreateView
-from django.urls import reverse_lazy
+
 
 def check_user_group_before_login(request):
     '''
