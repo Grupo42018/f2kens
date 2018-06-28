@@ -13,7 +13,7 @@ def check_user_group_before_login(request):
     Esta vista busca si el usuario pertenece a un grupo de usuario
     especifico y lo redirecciona a su correspondiente url.
     '''
-    if request.user.groups.filter(name='Directors').exists(): 
+    if request.user.groups.filter(name='Directives').exists(): 
         return redirect('index_director')
 
     elif request.user.groups.filter(name='Preceptors').exists(): 
