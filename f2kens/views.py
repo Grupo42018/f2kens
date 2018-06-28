@@ -119,8 +119,3 @@ def get_years(request):
     return JsonResponse(a, safe=False)
 
 
-class RegistroUsuario(CreateView):
-    model = User
-    template_name = "form.html"
-    form_class = UserCreationForm
-    success_url = reverse_lazy('check_user')

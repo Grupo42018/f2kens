@@ -53,3 +53,10 @@ def createUser(request):
 
 def base(request):
     return render(request, 'base.html')
+
+
+class RegistroUsuario(CreateView):
+    model = User
+    template_name = "form.html"
+    form_class = UserCreationForm
+    success_url = reverse_lazy('check_user')
