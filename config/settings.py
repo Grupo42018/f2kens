@@ -35,9 +35,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'f2kens',
+    'f2kens.apps.F2KensConfig',
     'frontend_token',
-    'oauth2_provider',
+    'oauth2_provider',   
 ]
 
 AUTHENTICATION_BACKENDS = (
