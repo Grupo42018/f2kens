@@ -2,6 +2,7 @@ import datetime
 
 from django.db import models
 from django.conf import settings
+from django.core.mail import send_mail
 from oauth2_provider import models as tokens
 
 from .utils import apiModel
@@ -130,11 +131,23 @@ class Formulario2(Formulario):      ###clase formulario 2
     state = models.CharField(
         max_length=50,
         choices=F2_STATES,
-        default='EnEspera')  ###state para las decicisiones (RECHAZAR, ACEPTAR, EN ESPERA)
+        default='En Espera')  ###state para las decicisiones (RECHAZAR, ACEPTAR, EN ESPERA)
     
     class Meta:
         verbose_name = 'F2'
         verbose_name_plural = 'F2es'
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            subject = "Su hijo {} puede retirarse temprano".format(self.student.first_name)
+            message = '127.0.0.1:8000/tutor/'
+            send_mail(
+                subject,
+                message,
+                settings.EMAIL_HOST_USER,
+                [x.email for x in ApiParent.filter(childs=self.student)],
+                fail_silently=False)
+        super(Formulario2, self).save(*args, **kwargs)
 
     def __str__(self):
         basestr = super().__str__()
