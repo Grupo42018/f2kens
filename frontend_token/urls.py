@@ -9,7 +9,6 @@ urlpatterns = [
     path('', auth_views.login, {'template_name': 'login.html'}, name='login'),
     path('logout/', auth_views.logout, name='logout'),
     path('checking_user/', f2kens.check_user_group_before_login, name='check_user'),
-    path('checking_group/', f2kens.check_user_group_and_redirect, name='check_group'),
     path('preceptor/', views.index_preceptor, name='index_preceptor'),
     path('director/', views.index_director, name="index_director"),
     path('tutor/', views.index_tutor, name='index_tutor'),
