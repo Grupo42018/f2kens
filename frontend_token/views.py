@@ -2,25 +2,15 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import *
 from django.utils import timezone
+from django.contrib.auth.models import Group, User
+from django.contrib.auth.forms import UserCreationForm
+from django.views.generic import CreateView
+from django.urls import reverse_lazy
+
 from f2kens.models import *
 
-# Create your views here.
-
 def index_director(request):
-	context = {}
-	"""
-	context['preceptores'] = Preceptor.objects.all()
-	context['dispositivos'] = Device.objects.all()
-	context['directores'] = Director.objects.all()
-	context['alumnos'] = Student.objects.all()
-	context['asistencias'] = Absence.objects.all()
-	context['tutores'] = Tutor.objects.all()
-	context['cursos'] = Curso.objects.all()
-	context['cursos_auxiliares'] = Curso_aux.objects.all()
-	context['formularios2'] = Form2.objects.all()
-	context['formularios3'] = Form3.objects.all()
-	"""
-	return render(request, 'director.html', context)
+	return render(request, 'director.html')
 
 def modalpre(request):
 	return render(request, 'modalpre.html')
@@ -46,3 +36,17 @@ def index_tutor(request):
 		return render(request, 'tutor.html', {'formularios2': get_forms2})
 	else:
 		return redirect('login')
+
+def createUser(request):
+    form = userForm()
+    return render(request, 'form.html', {'form': form})
+
+def base(request):
+    return render(request, 'base.html')
+
+
+class RegistroUsuario(CreateView):
+    model = User
+    template_name = "form.html"
+    form_class = UserCreationForm
+    success_url = reverse_lazy('check_user')
