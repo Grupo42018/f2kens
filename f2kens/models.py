@@ -14,13 +14,25 @@ F2_STATES = [
     ('Rechazado','Rechazado')
 ]
 
+STATUS_CHOICES = {
+    '1': "Regular",
+    '2': "1ra Reincorp",
+    '3': "2da Reincorp",
+    '4': "Libre"
+
+}
+
 class ApiYear(apiModel.APIModel):
     _url = 'years/'
     year_number = apiModel.Field(int)
     division = apiModel.Field(str)
 
+    @property
+    def students(self):
+        return ApiStudent.filter(year=self)
+
     def __str__(self):
-        return "{} {}".format(self.year_number, self.division)
+        return "{} {}".format(self.year_number, self.division.upper())
 
 
 class ApiPreceptor(apiModel.APIModel):
@@ -39,7 +51,7 @@ class ApiStudent(apiModel.APIModel):
     dni = apiModel.Field(int)
     student_tag = apiModel.Field(int)
     list_number = apiModel.Field(int)
-    status = apiModel.Field(int)
+    status = apiModel.Field(str, choices=STATUS_CHOICES)
     year = apiModel.Field(ApiYear)
 
 

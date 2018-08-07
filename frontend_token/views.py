@@ -1,4 +1,3 @@
-
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import *
 from django.utils import timezone
@@ -10,32 +9,33 @@ from django.urls import reverse_lazy
 from f2kens.models import *
 
 def index_director(request):
-	return render(request, 'director.html')
+    return render(request, 'director.html')
 
 def modalpre(request):
-	return render(request, 'modalpre.html')
+    return render(request, 'modalpre.html')
 
 def index(request):
-	return render(request, 'index.html')
+    return render(request, 'index.html')
 
 def index_preceptor(request):
-	context = {}
-	context['formularios'] = Formulario2.objects.all()
-	context['preceptores'] = Preceptor.objects.all()
-	context['students'] = ApiStudent.get_all()
-	return render(request, 'preceptor.html', context)
+    context = {
+        'formularios': Formulario2.objects.filter(preceptor__user=request.user),
+        'years': Preceptor.objects.get(user=request.user).model.year
+    }
+
+    return render(request, 'preceptor.html', context)
 
 def index_guard(request):
-	return render(request, 'guard.html')
+    return render(request, 'guard.html')
 
 def index_tutor(request):
-	if request.user.groups.filter(name='Tutors').exists():
-		parent = Parent.objects.get(user=request.user)
-		for student in parent.model.childs:
-			get_forms2 = Formulario2.objects.filter(student=student, date=timezone.now().date())
-		return render(request, 'tutor.html', {'formularios2': get_forms2})
-	else:
-		return redirect('login')
+    if request.user.groups.filter(name='Tutors').exists():
+        parent = Parent.objects.get(user=request.user)
+        for student in parent.model.childs:
+            get_forms2 = Formulario2.objects.filter(student=student, date=timezone.now().date())
+        return render(request, 'tutor.html', {'formularios2': get_forms2})
+    else:
+        return redirect('login')
 
 def createUser(request):
     form = userForm()
