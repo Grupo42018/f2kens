@@ -121,27 +121,29 @@
         <div class="tab-pane" id="students">
 
           <div class="container">
+            {% for year in years %}
             <div class="jumbotron">
-            <legend>Year 1</legend>
+            <legend>{{ year.year_number }} - {{ year.division | upper }}</legend>
               <div class="row">
 
-
+                {% for student in year.students %}
                 <div class="col-md-3 col-sm-10">
                   <div class='card text-white bg-info' style='margin-bottom:20px'>
                     <img class="card-img-top" src="{% static "img/generic.jpg" %}" alt="Card image cap">
-                    <div class='card-header'>State Reincorporation</div>
+                    <div class='card-header'>{{ student.status }}</div>
                     <div class='card-body'>
-                      <h5 class='card-title'>Student Name</h5>
+                      <h5 class='card-title'>{{ student.last_name }} {{ student.first_name }}</h5>
                       <ul class='list-group list-group-flush'>
-                        <li class='list-group-item bg-dark'>YYYY/MM/DD HH:MM</li>
+                        <li class='list-group-item bg-dark mx-auto'><button type="button" class="btn btn-primary">Parents</button></li>
                       </ul>
                     </div>
                   </div>
                 </div>
-
+                {% endfor %}
 
               </div>
             </div>
+            {% endfor %}
           </div>
 
         </div>
