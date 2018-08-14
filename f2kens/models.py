@@ -82,7 +82,7 @@ class ApiAbsence(apiModel.APIModelSaveable):
 
 class Preceptor(models.Model):
     model=apiModel.ApiField(ApiPreceptor, unique=True)
-    user=models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user=models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     @classmethod
     def filter_model(cls, **kwargs):
@@ -124,7 +124,7 @@ class Formulario(models.Model):
     student = apiModel.ApiField(ApiStudent)
     date = models.DateField(auto_now=True)
     time = models.TimeField()
-    preceptor = models.ForeignKey(Preceptor, on_delete=models.DO_NOTHING)
+    preceptor = models.ForeignKey(Preceptor, on_delete=models.CASCADE)
     motivo = models.CharField(max_length=300)
 
     class Meta:

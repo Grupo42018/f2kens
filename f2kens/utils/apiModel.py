@@ -58,6 +58,9 @@ class APIModel(object):
                         parameters \'{url}\'".format(
                             attr=attr, url=self._url))
 
+    def __eq__(self, oth):
+        return self._api_id == oth._api_id
+
     def _check_copy(self, copy_id, cls):
         # If the id of the requested object is the same as this instance and the
         # instance is the same as the class then its a match
@@ -98,7 +101,6 @@ class APIModel(object):
         Keyword Arguments:
         `**kwargs` -- The filter variables and its values
         """
-
         for obj in json.load(cls._request(urlattr=cls.__url_gen(kwargs))):
             new = cls(**obj)
             new._api_id = obj['id']

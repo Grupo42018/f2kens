@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import *
 
 from .models import *
 from .utils.apiModel import *
+from utils import decorators
 
 # TODO: Actualizar documentación de las vistas.
 
@@ -25,32 +26,15 @@ def check_user_group_before_login(request):
     Esta vista busca si el usuario pertenece a un grupo de usuario
     especifico y lo redirecciona a su correspondiente url.
     '''
-    if request.user.groups.all().count() == 1:
-        if request.user.groups.filter(name='Directives'):
-            return redirect('index_director')
-        if request.user.groups.filter(name='Preceptors'):
-            return redirect('index_preceptor')
-        if request.user.groups.filter(name='Tutors'):
-            return redirect('index_tutor')
-        if request.user.groups.filter(name='Guards'):
-            return redirect('index_guard')
-    elif request.user.groups.all().count() > 1:
+    if request.user.groups.all().count() > 1:
         return select_user_group(request)
-    else:
-        return redirect('login')
-
-def check_user_group_and_redirect(request):
-    '''
-    Esta vista busca si el usuario pertenece a un grupo de usuario
-    especifico y lo redirecciona a su correspondiente url.
-    '''
-    if request.user.groups.filter(name='Directives'):
+    elif request.user.groups.filter(name='Directives'):
         return redirect('index_director')
-    if request.user.groups.filter(name='Preceptors'):
+    elif request.user.groups.filter(name='Preceptors'):
         return redirect('index_preceptor')
-    if request.user.groups.filter(name='Tutors'):
+    elif request.user.groups.filter(name='Tutors'):
         return redirect('index_tutor')
-    if request.user.groups.filter(name='Guards'):
+    elif request.user.groups.filter(name='Guards'):
         return redirect('index_guard')
     else:
         return redirect('login')
@@ -111,7 +95,7 @@ def get_f2s(request):
             })
     return JsonResponse(a, safe=False)
 
-
+@decorators.checkGroup("Preceptors")
 def get_years(request):
     query = None
     if request.user.is_authenticated:
@@ -127,5 +111,3 @@ def get_years(request):
             'year_number': i.year_number,
             })
     return JsonResponse(a, safe=False)
-
-
