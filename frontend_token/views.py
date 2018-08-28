@@ -20,7 +20,7 @@ def index(request):
 
 def index_preceptor(request):
 	context = {}
-	context['formularios'] = Formulario2.objects.all()
+	context['formularios'] = Formulario2.objects.all().order_by('state')
 	context['preceptores'] = Preceptor.objects.all()
 	context['students'] = ApiStudent.get_all()
 	return render(request, 'preceptor.html', context)
