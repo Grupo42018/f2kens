@@ -176,12 +176,14 @@ class Formulario3(Formulario):      ###clase formulario 3
         basestr = super().__str__()
         return "{name} {old}".format(name=self.Meta.verbose_name, old=basestr)
 
+      
 class Guard(models.Model):
     schedule = models.CharField(max_length=100)
     firstname = models.CharField(max_length=100)
     lastname = models.CharField(max_length=100)
     dni = models.IntegerField()
 
+    
 class Exit(models.Model):
     schedule = models.DateTimeField(auto_now_add=True, blank=True)
     student = apiModel.ApiField(ApiStudent, unique=True)
