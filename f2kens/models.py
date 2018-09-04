@@ -145,6 +145,8 @@ class Formulario2(Formulario):      ###clase formulario 2
         choices=F2_STATES,
         default='En Espera')  ###state para las decicisiones (RECHAZAR, ACEPTAR, EN ESPERA)
     
+    isincollege=models.BooleanField(default=False) ###boolean para saber si el alumno sigue en el colegio o ya se retiro
+
     class Meta:
         verbose_name = 'F2'
         verbose_name_plural = 'F2es'
@@ -180,4 +182,3 @@ class Guard(models.Model):
     firstname = models.CharField(max_length=100)
     lastname = models.CharField(max_length=100)
     dni = models.IntegerField()
-    
