@@ -1,7 +1,7 @@
-import datetime
+from datetime import datetime
 
-from oauth2_provider import models
+from django.conf import settings
+from django.utils import timezone
 
-
-def generate_token():
+class TokenHandler:
     pass
