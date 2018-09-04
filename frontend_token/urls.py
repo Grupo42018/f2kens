@@ -11,6 +11,6 @@ urlpatterns = [
     path('preceptor/', index_preceptor, name='index_preceptor'),
     path('director/', index_director, name="index_director"),
     path('tutor/', index_tutor, name='index_tutor'),
-    path('guard/', index_guard, name='index_guard'),
+    path('guardia/', index_guard, name='index_guardia'),
     path('modal_preceptor/', modalpre, name="modalpre")
 ]
