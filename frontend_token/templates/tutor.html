@@ -1,0 +1,37 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Tutor</title>
+    </head>
+    <body>
+        <ul>
+            <h1 style='text-align:center'>
+                Formularios para {{ user.first_name|title }} {{ user.last_name|title }} 
+            </h1>
+            <li><a href='{% url "logout" %}'>Cerrar sesión</a></li>
+        </ul>
+        
+        {% for f2 in formularios2 %}
+            <div align='center' style='border-style:solid;width:33%'>
+                <h3>F2 de {{ f2.student.first_name }} {{ f2.student.last_name }} ({{ f2.student.year }})</h3>
+                <h5>{{ f2.date }} {{ f2.time }}</h5>
+                {% if f2.state == 'Aprobado' %}
+                    <h4>Estado actual: <b style='color:green'>{{ f2.state }}</b></h4>
+                {% elif f2.state == 'Rechazado' %}
+                    <h4>Estado actual: <b style='color:red'>{{ f2.state }}</b></h4>
+                {% endif %}
+                <h5>Motivo: {{ f2.motivo }}</h5>
+                <form method='POST' action='{% url "estado_f2" form2_id=f2.id %}'>
+                    {% csrf_token %}
+                    <select name='estado'>
+                        <option value='Aprobado'>Aceptar</option>
+                        <option value='Rechazado'>Rechazar</option>
+                    </select>
+                    <br>
+                    <br>
+                    <button type='submit'>Enviar</button>
+                </form>
+            </div>           
+        {% endfor %}
+    </body>
+</html>

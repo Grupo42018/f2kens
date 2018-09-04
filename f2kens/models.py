@@ -2,8 +2,10 @@ import datetime
 
 from django.db import models
 from django.conf import settings
+from django.core.mail import send_mail
+from oauth2_provider import models as tokens
 
-from . import apiModel
+from .utils import apiModel
 
 
 F2_STATES = [
@@ -12,10 +14,25 @@ F2_STATES = [
     ('Rechazado','Rechazado')
 ]
 
+STATUS_CHOICES = {
+    '1': "Regular",
+    '2': "1ra Reincorp",
+    '3': "2da Reincorp",
+    '4': "Libre"
+
+}
+
 class ApiYear(apiModel.APIModel):
     _url = 'years/'
     year_number = apiModel.Field(int)
     division = apiModel.Field(str)
+
+    @property
+    def students(self):
+        return ApiStudent.filter(year=self)
+
+    def __str__(self):
+        return "{} {}".format(self.year_number, self.division.upper())
 
 
 class ApiPreceptor(apiModel.APIModel):
@@ -33,7 +50,8 @@ class ApiStudent(apiModel.APIModel):
     last_name = apiModel.Field(str)
     dni = apiModel.Field(int)
     student_tag = apiModel.Field(int)
-    status = apiModel.Field(int)
+    list_number = apiModel.Field(int)
+    status = apiModel.Field(str, choices=STATUS_CHOICES)
     year = apiModel.Field(ApiYear)
 
 
@@ -42,6 +60,7 @@ class ApiParent(apiModel.APIModel):
     first_name = apiModel.Field(str)
     last_name = apiModel.Field(str)
     email = apiModel.Field(str)
+    childs = apiModel.Field(ApiStudent, is_array=True)
 
 
 class ApiRegistro(apiModel.APIModel):
@@ -65,22 +84,48 @@ class Preceptor(models.Model):
     model=apiModel.ApiField(ApiPreceptor, unique=True)
     user=models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
+    @classmethod
+    def filter_model(cls, **kwargs):
+        for i in cls.objects.all():
+            comp = True
+            for key in kwargs.keys():
+                if kwargs[key] != getattr(i.model, key):
+                    comp = False
+                    continue
+            if comp:
+                yield i
+
+    def __str__(self):
+        return "{model.last_name}, {model.first_name}".format(model=self.model)
+
 
 class Parent(models.Model):
     model = apiModel.ApiField(ApiParent, unique=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
+    @classmethod
+    def filter_model(cls, **kwargs):
+        for i in cls.objects.all():
+            comp = True
+            for key in kwargs.keys():
+                if kwargs[key] not in getattr(i.model, key):
+                    comp = False
+                    continue
+            if comp:
+                yield i
+            
 
 class Device(models.Model):
-    token = models.CharField(max_length=128)
-    parent = models.ForeignKey(Parent, on_delete=models.CASCADE)
+    token = models.ForeignKey(tokens.Application, on_delete=models.PROTECT)
+    parent = models.OneToOneField(Parent, related_name="device", on_delete=models.CASCADE)
 
 
 class Formulario(models.Model):
-    student = models.IntegerField()
+    student = apiModel.ApiField(ApiStudent)
     date = models.DateField(auto_now=True)
     time = models.TimeField()
-    preceptor = models.ForeignKey(Preceptor,on_delete=models.DO_NOTHING)
+    preceptor = models.ForeignKey(Preceptor, on_delete=models.DO_NOTHING)
+    motivo = models.CharField(max_length=300)
 
     class Meta:
         abstract=True
@@ -95,22 +140,32 @@ class Formulario(models.Model):
             prec=self.preceptor)
 
 class Formulario2(Formulario):      ###clase formulario 2
-    motivo_docente = models.CharField(max_length=300)
     state = models.CharField(
         max_length=50,
         choices=F2_STATES,
-        default='EnEspera')  ###state para las decicisiones (RECHAZAR, ACEPTAR, EN ESPERA)
+        default='En Espera')  ###state para las decicisiones (RECHAZAR, ACEPTAR, EN ESPERA)
     
     class Meta:
         verbose_name = 'F2'
         verbose_name_plural = 'F2es'
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            subject = "Su hijo {} puede retirarse temprano".format(self.student.first_name)
+            message = '127.0.0.1:8000/tutor/'
+            send_mail(
+                subject,
+                message,
+                settings.EMAIL_HOST_USER,
+                [x.email for x in ApiParent.filter(childs=self.student)],
+                fail_silently=False)
+        super(Formulario2, self).save(*args, **kwargs)
 
     def __str__(self):
         basestr = super().__str__()
         return "{name} {old}".format(name=self.Meta.verbose_name, old=basestr)
 
 class Formulario3(Formulario):      ###clase formulario 3
-    motivo_alumno = models.CharField(max_length=300)
 
     class Meta:
         verbose_name = 'F3'

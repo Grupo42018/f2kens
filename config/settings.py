@@ -15,22 +15,16 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'f2kens@gmail.com' 
-EMAIL_HOST_PASSWORD = 'f2kensgroup'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'g$ml73umt#o%by-tad-*_w&18$pm=(8s3$5_ruaod45!gd^=(u'
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
-
 
 # Application definition
 
@@ -41,9 +35,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'f2kens',
+    'f2kens.apps.F2KensConfig',
     'frontend_token',
+    'oauth2_provider',   
 ]
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'oauth2_provider.backends.OAuth2Backend',
+)
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -53,6 +53,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'oauth2_provider.middleware.OAuth2TokenMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -109,7 +110,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
-LANGUAGE_CODE = 'es-AR'
+LANGUAGE_CODE = 'en-US'
 
 TIME_ZONE = 'America/Argentina/Cordoba'
 
@@ -128,6 +129,19 @@ STATICFILES_DIRS = [
 ]
 
 
+# Email sending config stuff
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'f2kens@gmail.com' 
+EMAIL_HOST_PASSWORD = 'f2kensgroup'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+
+# Login config stuff
+LOGIN_REDIRECT_URL = 'check_user'
+LOGOUT_REDIRECT_URL = 'login'
+
+
 ASISTENCIA={
     'API': '127.0.0.1',
     'PORT': '5000',
@@ -136,3 +150,5 @@ ASISTENCIA={
     'USER': 'admin',
     'PASS': 'admin123',
 }
+
+OAUTH2_PROVIDER_APPLICATION_MODEL = 'oauth2_provider.Application'

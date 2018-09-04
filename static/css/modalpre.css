@@ -1,0 +1,102 @@
+
+body {font-family: Arial, Helvetica, sans-serif;}
+
+/* Style for the search box */
+
+* {
+  box-sizing: border-box;
+}
+
+/*  ul and searchbox conteiner style  */
+#containerbox {
+    position: absolute;
+    right: 420px;
+    bottom: 100px;
+}
+
+/* searchBox Style */
+#searchBox {
+  width: 500px;
+  font-size: 16px;
+  padding: 12px 20px 12px 40px;
+  border: 1px solid #ddd;
+  margin-bottom: 12px;
+}
+
+/* searchBox Icon */
+#searchIcon {
+  position: relative;
+  right: 489px;
+  color: #00000060;
+}
+
+/* Style for the list  */
+.list {
+    overflow-y: scroll;
+    overflow-x: auto;
+    width: 500px;
+    height: 400px;
+}
+
+/* The container */
+.container {
+    display: block;
+    position: relative;
+    padding-left: 50px;
+    margin-bottom: 15px;
+    cursor: pointer;
+    padding: 16px;
+    font-size: 22px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-color: whitesmoke;
+}
+
+.container:hover {
+    background-color: #2196F3;
+    z-index: 0.5%;
+}
+
+
+/* Hide the browser's default button */
+.container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    padding-top: 60px;
+}
+
+/* The Close Button (x) */
+.close {
+    position: absolute;
+    right: 1px;
+    top: 0;
+}
+
+/* Add Zoom Animation (example the zoom of the modal)*/
+.animate {
+    -webkit-animation: animatezoom 0.6s;
+    animation: animatezoom 0.6s
+}
+
+#cardstyle {
+    width: 18rem; 
+    position: relative; 
+    left: 540px;
+}

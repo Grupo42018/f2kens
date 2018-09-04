@@ -12,7 +12,6 @@ from django.db import models
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
-
 class APIModel(object):
     """API Model Manager
 
@@ -48,10 +47,11 @@ class APIModel(object):
                 self._attributes.append(attr)
                 try:
                     # Replace the attributes with their values to make them directly 
-                    # accesable
-                    setattr(self, attr,
-                            getattr(self, attr)._do_field(
-                                kwargs[attr], parent=self))
+                    # accesable unless they are not ApiField
+                    if (isinstance(getattr(self, attr), Field)):
+                        setattr(self, attr,
+                                getattr(self, attr)._do_field(
+                                    kwargs[attr], parent=self))
                 except KeyError:
                     raise AttributeError(
                         "The attribute \'{attr}\' is not present in the given \
@@ -70,6 +70,14 @@ class APIModel(object):
         # Else try this instances parent
         else:
             return self._parent._check_copy(copy_id, cls)
+
+    def __eq__(self, other):
+        if other is not self.__class__:
+            return False
+        return self._api_id == other._api_id
+
+    def __str__(self):
+        return str(self._api_id)
 
     @classmethod
     def get_all(cls):
@@ -90,11 +98,8 @@ class APIModel(object):
         Keyword Arguments:
         `**kwargs` -- The filter variables and its values
         """
-        urlattr = "?"
-        for x in kwargs.keys():
-            urlattr += "{}={}&".format(x, kwargs[x])
 
-        for obj in json.load(cls._request(urlattr=urlattr[:-1])):
+        for obj in json.load(cls._request(urlattr=cls.__url_gen(kwargs))):
             new = cls(**obj)
             new._api_id = obj['id']
             return new
@@ -109,14 +114,12 @@ class APIModel(object):
         Keyword arguments:
         `**kwargs` -- The filter variables and its values
         """
-        urlattr = "?"
-        for x in kwargs.keys():
-            urlattr += "{}={}&".format(x, kwargs[x])
         # If the id of the requested object is the same as this instance and
 
-        for obj in json.load(cls._request(urlattr=urlattr[:-1])):
+        for obj in json.load(
+            cls._request(
+                urlattr=cls.__url_gen(kwargs))):
             new = cls(**obj)
-            new._api_id = obj['id']
             yield new
 
     @classmethod
@@ -162,14 +165,23 @@ class APIModel(object):
                      HTTP requests") from cre
 
         response = conn.getresponse()
-        print("{}{}{}".format(
-                         BASEPATH, cls._url, urlattr))
         if response.status == 404:
             raise NotFoundError(
                 "The url with the requested attributes could not be found")
 
         conn.close()  # Close the connection
         return response  # return response
+
+    @staticmethod
+    def __url_gen(kwargs):
+        urlattr = "?"
+        for x in kwargs.keys():
+            if isinstance(kwargs[x], APIModel):
+                urlattr += "{}={}&".format(x, kwargs[x]._api_id)
+                continue
+            urlattr += "{}={}&".format(x, kwargs[x])
+
+        return urlattr[:-1]
 
 
 class APIModelSaveable(APIModel):
@@ -181,6 +193,7 @@ class APIModelSaveable(APIModel):
 
     def __init__(self, **kwargs):
         # set the api_id if it was given
+        self._api_id = None
         if ('id' in kwargs.keys()):
             self._api_id = kwargs['id']
         super().__init__(**kwargs)
@@ -234,19 +247,22 @@ class Field(object):
     `class_` -- the type to be created
     `is_array` -- if it should create a list or a single instance
     """
-    def __init__(self, class_, is_array=False, *args):
+    def __init__(self, class_, is_array=False, choices={}, *args):
         self.class_ = class_
         self.is_array = is_array
+        self.choices = choices
         self.args = args
 
     def _do_field(self, data, parent):
         if inspect.isclass(self.class_):
             if self.is_array:
                 if isinstance(data[0], self.class_):
+                    for i in range(len(data)):
+                        data[i] = self._check_choices(data[i])
                     return data
             else:
                 if isinstance(data, self.class_):
-                    return data
+                    return self._check_choices(data)
             if issubclass(self.class_, APIModel):
                 if self.is_array:
                     a = []
@@ -254,21 +270,27 @@ class Field(object):
                         copy = parent._check_copy(obj['id'], self.class_)
                         if copy:
                             a.append(copy)
-                        a.append(self.class_(_parent=parent, **obj))
+                        a.append(self._check_choices(self.class_(_parent=parent, **obj)))
                     return a
                 else:
                     copy = parent._check_copy(data['id'], self.class_)
                     if copy:
                         return copy
-                    return self.class_(_parent=parent, **data)
+                    return self._check_choices(self.class_(_parent=parent, **data))
         else:
             if self.is_array:
                 a = []
                 for obj in data:
-                    a.append(self.class_(obj, *self.args))
+                    a.append(self._check_choices(self.class_(obj, *self.args)))
                 return attr
             else:
-                return self.class_(data, *self.args)
+                return self._check_choices(self.class_(data, *self.args))
+
+    def _check_choices(self, value):
+        try:
+            return self.choices[value]
+        except:
+            return value
 
 
 class ApiField(models.Field):
@@ -286,7 +308,7 @@ class ApiField(models.Field):
     def from_db_value(self, value, expression, connection):
         if value is None:
             return value
-        return self.class_.get(rid=value)
+        return self.class_.get(id=value)
 
     def to_python(self, value):
         if isinstance(value, APIModel):
@@ -295,12 +317,16 @@ class ApiField(models.Field):
         if value is None:
             return value
 
-        return self.class_.get(rid=value)
+        return self.class_.get(id=value)
 
     def get_internal_type(self):
         return "IntegerField"
 
     def get_prep_value(self, value):
+        if not isinstance(value, self.class_):
+            raise AttributeError(
+                "The value passed is a {type} instead of {need}".format(
+                    type=value.__class__, need=self.class_))
         return value._api_id
 
     def deconstruct(self):

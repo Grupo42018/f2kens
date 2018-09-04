@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+
+<html>
+	{% load staticfiles %}
+	<head>
+		<meta charset='utf-8'>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="{% static "font-awesome/css/font-awesome.min.css" %}">
+		<link rel="stylesheet" type="text/css" href="{% static 'css/login_style.css' %}">
+
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+
+	</head>
+
+	<body>
+		<div class="container h-100">
+			<div class="row h-100 justify-content-center align-items-center">
+				<div class="col-md-4 col-sm-12 mx-auto">
+					<form action=""  method="POST">
+						<div class="row">
+							<i class="mx-auto fa fa-user" id="avatar"></i>
+						</div>
+
+						<div class="container">
+							{% csrf_token %}
+							<div class="form-group">
+								<label for="uname" class="label"><b>Usuario</b></label>
+								<input class="input" type="text" placeholder="Ingrese su usuario" name="username" required>
+							</div>
+							<div class="form-group">
+								<label for="psw" class="label"><b>Contraseña</b></label>
+								<input class="input" type="password" placeholder="Ingrese su contraseña" name="password" required>
+							</div>
+							<button type="submit" class="btn">Login</button>
+						</div>    
+					</form>
+				</div>
+			</div>
+		</div>
+		{% if form.errors %}
+			<h1 style='color:red;text-align:center'>Error al ingresar. Compruebe sus datos nuevamente.</h2>
+		{% endif %}
+	</body>
+</html>
+
+
+<!--
+<script>
+// Get the modal
+var modal = document.getElementById('id01');
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+</script>
+-->
