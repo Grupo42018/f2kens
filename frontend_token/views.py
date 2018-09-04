@@ -33,13 +33,11 @@ def index_guard(request):
 @decorators.checkGroup("Tutors")
 def index_tutor(request):
     get_forms2=[]
-    if request.user.groups.filter(name='Tutors').exists():
-        parent = Parent.objects.get(user=request.user)
-        for student in parent.model.childs:
-            get_forms2.append(Formulario2.objects.filter(student=student, date=timezone.now().date()))
-        return render(request, 'tutor.html', {'formularios2': get_forms2})
-    else:
-        return redirect('login')
+    parent = Parent.objects.get(user=request.user)
+    for student in parent.model.childs:
+        get_forms2.append(Formulario2.objects.filter(student=student, date=timezone.now().date()))
+    return render(request, 'tutor.html', {'formularios2': get_forms2})
+
 
 def createUser(request):
     form = userForm()

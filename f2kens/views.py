@@ -5,6 +5,11 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.models import Group, User
 from django.contrib.auth.decorators import *
+from django.core.exceptions import ObjectDoesNotExist
+from django.conf import settings
+from oauth2_provider import models as tokensmod
+from oauth2_provider.decorators import protected_resource
+from oauth2_provider.views import TokenView
 
 from .models import *
 from .utils.apiModel import *
@@ -39,6 +44,7 @@ def check_user_group_before_login(request):
     else:
         return redirect('login')
 
+@decorators.checkGroup("Preceptors")
 def create_f2(request):
     '''
     Esta vista se usa para crear F2. Se envia
@@ -59,21 +65,19 @@ def create_f2(request):
 
     return redirect('index_preceptor')
 
+@decorators.checkGroup("Tutors")
 def update_f2_state(request, form2_id):
     get_form2 = Formulario2.objects.get(id=form2_id)
     get_state = request.POST['estado']
     if get_state == 'Aprobado':
         get_form2.state = 'Aprobado'
         get_form2.save()
-        return redirect('index_tutor')
     elif get_state == 'Rechazado':
         get_form2.state = 'Rechazado'
         get_form2.save()
-        return redirect('index_tutor')
-    else:
-        return redirect('index_tutor')
+    return redirect('index_tutor')
 
-
+@decorators.checkGroup("Tutors", "Preceptors")
 def get_f2s(request):
     if request.user.is_authenticated:
         query = Formulario2.objects.filter(preceptor__user=request.user)

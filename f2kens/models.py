@@ -116,7 +116,7 @@ class Parent(models.Model):
             
 
 class Device(models.Model):
-    token = models.ForeignKey(tokens.Application, on_delete=models.PROTECT)
+    token = models.ForeignKey(tokens.AccessToken, on_delete=models.PROTECT)
     parent = models.OneToOneField(Parent, related_name="device", on_delete=models.CASCADE)
 
 
