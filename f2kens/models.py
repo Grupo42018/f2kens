@@ -145,6 +145,7 @@ class Formulario2(Formulario):      ###clase formulario 2
         choices=F2_STATES,
         default='En Espera')  ###state para las decicisiones (RECHAZAR, ACEPTAR, EN ESPERA)
     
+
     class Meta:
         verbose_name = 'F2'
         verbose_name_plural = 'F2es'
@@ -181,3 +182,7 @@ class Guard(models.Model):
     lastname = models.CharField(max_length=100)
     dni = models.IntegerField()
     
+
+class Exit(models.Model):
+    schedule = models.DateTimeField(auto_now_add=True, blank=True)
+    student = apiModel.ApiField(ApiStudent, unique=True)
