@@ -101,6 +101,7 @@ class APIModel(object):
         Keyword Arguments:
         `**kwargs` -- The filter variables and its values
         """
+
         for obj in json.load(cls._request(urlattr=cls.__url_gen(kwargs))):
             new = cls(**obj)
             new._api_id = obj['id']

@@ -38,7 +38,6 @@ def index_tutor(request):
         get_forms2.append(Formulario2.objects.filter(student=student, date=timezone.now().date()))
     return render(request, 'tutor.html', {'formularios2': get_forms2})
 
-
 def createUser(request):
     form = userForm()
     return render(request, 'form.html', {'form': form})
