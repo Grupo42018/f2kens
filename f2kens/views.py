@@ -5,9 +5,15 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.models import Group, User
 from django.contrib.auth.decorators import *
+from django.core.exceptions import ObjectDoesNotExist
+from django.conf import settings
+from oauth2_provider import models as tokensmod
+from oauth2_provider.decorators import protected_resource
+from oauth2_provider.views import TokenView
 
 from .models import *
 from .utils.apiModel import *
+from utils import decorators
 
 # TODO: Actualizar documentación de las vistas.
 
@@ -25,36 +31,20 @@ def check_user_group_before_login(request):
     Esta vista busca si el usuario pertenece a un grupo de usuario
     especifico y lo redirecciona a su correspondiente url.
     '''
-    if request.user.groups.all().count() == 1:
-        if request.user.groups.filter(name='Directives'):
-            return redirect('index_director')
-        if request.user.groups.filter(name='Preceptors'):
-            return redirect('index_preceptor')
-        if request.user.groups.filter(name='Tutors'):
-            return redirect('index_tutor')
-        if request.user.groups.filter(name='Guards'):
-            return redirect('index_guard')
-    elif request.user.groups.all().count() > 1:
+    if request.user.groups.all().count() > 1:
         return select_user_group(request)
-    else:
-        return redirect('login')
-
-def check_user_group_and_redirect(request):
-    '''
-    Esta vista busca si el usuario pertenece a un grupo de usuario
-    especifico y lo redirecciona a su correspondiente url.
-    '''
-    if request.user.groups.filter(name='Directives'):
+    elif request.user.groups.filter(name='Directives'):
         return redirect('index_director')
-    if request.user.groups.filter(name='Preceptors'):
+    elif request.user.groups.filter(name='Preceptors'):
         return redirect('index_preceptor')
-    if request.user.groups.filter(name='Tutors'):
+    elif request.user.groups.filter(name='Tutors'):
         return redirect('index_tutor')
-    if request.user.groups.filter(name='Guards'):
+    elif request.user.groups.filter(name='Guards'):
         return redirect('index_guard')
     else:
         return redirect('login')
 
+@decorators.checkGroup("Preceptors")
 def create_f2(request):
     '''
     Esta vista se usa para crear F2. Se envia
@@ -75,21 +65,19 @@ def create_f2(request):
 
     return redirect('index_preceptor')
 
+@decorators.checkGroup("Tutors")
 def update_f2_state(request, form2_id):
     get_form2 = Formulario2.objects.get(id=form2_id)
     get_state = request.POST['estado']
     if get_state == 'Aprobado':
         get_form2.state = 'Aprobado'
         get_form2.save()
-        return redirect('index_tutor')
     elif get_state == 'Rechazado':
         get_form2.state = 'Rechazado'
         get_form2.save()
-        return redirect('index_tutor')
-    else:
-        return redirect('index_tutor')
+    return redirect('index_tutor')
 
-
+@decorators.checkGroup("Tutors", "Preceptors")
 def get_f2s(request):
     if request.user.is_authenticated:
         query = Formulario2.objects.filter(preceptor__user=request.user)
@@ -111,7 +99,7 @@ def get_f2s(request):
             })
     return JsonResponse(a, safe=False)
 
-
+@decorators.checkGroup("Preceptors")
 def get_years(request):
     query = None
     if request.user.is_authenticated:
@@ -127,5 +115,3 @@ def get_years(request):
             'year_number': i.year_number,
             })
     return JsonResponse(a, safe=False)
-
-

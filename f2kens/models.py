@@ -82,7 +82,7 @@ class ApiAbsence(apiModel.APIModelSaveable):
 
 class Preceptor(models.Model):
     model=apiModel.ApiField(ApiPreceptor, unique=True)
-    user=models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user=models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     @classmethod
     def filter_model(cls, **kwargs):
@@ -116,7 +116,7 @@ class Parent(models.Model):
             
 
 class Device(models.Model):
-    token = models.ForeignKey(tokens.Application, on_delete=models.PROTECT)
+    token = models.ForeignKey(tokens.AccessToken, on_delete=models.PROTECT)
     parent = models.OneToOneField(Parent, related_name="device", on_delete=models.CASCADE)
 
 
@@ -124,7 +124,7 @@ class Formulario(models.Model):
     student = apiModel.ApiField(ApiStudent)
     date = models.DateField(auto_now=True)
     time = models.TimeField()
-    preceptor = models.ForeignKey(Preceptor, on_delete=models.DO_NOTHING)
+    preceptor = models.ForeignKey(Preceptor, on_delete=models.CASCADE)
     motivo = models.CharField(max_length=300)
 
     class Meta:
@@ -176,13 +176,14 @@ class Formulario3(Formulario):      ###clase formulario 3
         basestr = super().__str__()
         return "{name} {old}".format(name=self.Meta.verbose_name, old=basestr)
 
+      
 class Guard(models.Model):
     schedule = models.CharField(max_length=100)
     firstname = models.CharField(max_length=100)
     lastname = models.CharField(max_length=100)
     dni = models.IntegerField()
-    
 
+    
 class Exit(models.Model):
     schedule = models.DateTimeField(auto_now_add=True, blank=True)
     student = apiModel.ApiField(ApiStudent, unique=True)

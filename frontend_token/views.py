@@ -7,6 +7,7 @@ from django.views.generic import CreateView
 from django.urls import reverse_lazy
 
 from f2kens.models import *
+from utils import decorators
 
 def index_director(request):
     return render(request, 'director.html')
@@ -17,6 +18,7 @@ def modalpre(request):
 def index(request):
     return render(request, 'index.html')
 
+@decorators.checkGroup("Preceptors")
 def index_preceptor(request):
     context = {
         'formularios': Formulario2.objects.filter(preceptor__user=request.user),
@@ -28,14 +30,13 @@ def index_preceptor(request):
 def index_guard(request):
     return render(request, 'guard.html')
 
+@decorators.checkGroup("Tutors")
 def index_tutor(request):
-    if request.user.groups.filter(name='Tutors').exists():
-        parent = Parent.objects.get(user=request.user)
-        for student in parent.model.childs:
-            get_forms2 = Formulario2.objects.filter(student=student, date=timezone.now().date())
-        return render(request, 'tutor.html', {'formularios2': get_forms2})
-    else:
-        return redirect('login')
+    get_forms2=[]
+    parent = Parent.objects.get(user=request.user)
+    for student in parent.model.childs:
+        get_forms2.append(Formulario2.objects.filter(student=student, date=timezone.now().date()))
+    return render(request, 'tutor.html', {'formularios2': get_forms2})
 
 def createUser(request):
     form = userForm()
