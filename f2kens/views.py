@@ -115,3 +115,21 @@ def get_years(request):
             'year_number': i.year_number,
             })
     return JsonResponse(a, safe=False)
+
+@decorators.checkGroup("Guards")
+def get_authorizedlist(request):
+    query = None
+    if request.user.is_authenticated:
+        query = Formulario2.objects.filter(status="Aprobado")
+    else
+        query = Formulario2.objects.all()
+
+    autorizedlist=[]
+    for i in query:
+        autorizedlist.append({
+            'dni':autorizedlist._dni,
+            'first_name': autorizedlist.first_name,
+            'last_name': autorizedlist.last_name,
+            'year_number': autorizedlist.year_number,
+            })
+    return JsonResponse(autorizedlist, safe=False)
