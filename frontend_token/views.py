@@ -22,7 +22,7 @@ def index(request):
 def index_preceptor(request):
     context = {
         'formularios': Formulario2.objects.filter(preceptor__user=request.user),
-        #'years': Preceptor.objects.get(user=request.user).model.year,
+        'years': Preceptor.objects.get(user=request.user).model.year,
         'all_approved_f2': Formulario2.objects.filter(
             preceptor__user=request.user,
             state='Aprobado'
