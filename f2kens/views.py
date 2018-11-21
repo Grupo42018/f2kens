@@ -1,18 +1,27 @@
 import json
 import datetime
 
+import pyfcm
+from django.apps import apps
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
+from django.db.models import Q
 from django.contrib.auth.models import Group, User
 from django.contrib.auth.decorators import *
 from django.core.exceptions import ObjectDoesNotExist
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
+from django.utils import timezone
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+from django.views.generic.base import View
 from oauth2_provider import models as tokensmod
-from oauth2_provider.decorators import protected_resource
-from oauth2_provider.views import TokenView
+from oauth2_provider.views.mixins import OAuthLibMixin
+from oauthlib.common import generate_token
 
 from .models import *
 from .utils.apiModel import *
+from .utils import mixins
 from utils import decorators
 
 # TODO: Actualizar documentación de las vistas.
@@ -24,7 +33,6 @@ def select_user_group(request):
 	else:
 		return redirect('login')
 	return render(request, 'user_group.html', {'user_groups':query_set})
-
 
 def check_user_group_before_login(request):
     '''
@@ -45,6 +53,7 @@ def check_user_group_before_login(request):
         return redirect('login')
 
 @decorators.checkGroup("Preceptors")
+@login_required
 def create_f2(request):
     '''
     Esta vista se usa para crear F2. Se envia
@@ -65,40 +74,6 @@ def create_f2(request):
 
     return redirect('index_preceptor')
 
-@decorators.checkGroup("Tutors")
-def update_f2_state(request, form2_id):
-    get_form2 = Formulario2.objects.get(id=form2_id)
-    get_state = request.POST['estado']
-    if get_state == 'Aprobado':
-        get_form2.state = 'Aprobado'
-        get_form2.save()
-    elif get_state == 'Rechazado':
-        get_form2.state = 'Rechazado'
-        get_form2.save()
-    return redirect('index_tutor')
-
-@decorators.checkGroup("Tutors", "Preceptors")
-def get_f2s(request):
-    if request.user.is_authenticated:
-        query = Formulario2.objects.filter(preceptor__user=request.user)
-    else:
-        query = Formulario2.objects.all()
-
-    a=[]
-    for i in query:
-        a.append({
-            'id': i.id,
-            'student': {
-                "first_name": i.student.first_name, 
-                "last_name": i.student.last_name,
-                "list_number": i.student.list_number},
-            'date': i.date,
-            'time': i.time,
-            'motivo': i.motivo,
-            'state': i.state,
-            })
-    return JsonResponse(a, safe=False)
-
 @decorators.checkGroup("Preceptors")
 def get_years(request):
     query = None
@@ -115,3 +90,137 @@ def get_years(request):
             'year_number': i.year_number,
             })
     return JsonResponse(a, safe=False)
+
+
+@decorators.checkGroup("Tutors")
+@login_required
+def update_f2_state(request, form2_id):
+    get_form2 = Formulario2.objects.get(id=form2_id)
+    get_state = request.POST['estado']
+    if get_state == 'Aprobado':
+        get_form2.state = 'Aprobado'
+        get_form2.save()
+    elif get_state == 'Rechazado':
+        get_form2.state = 'Rechazado'
+        get_form2.save()
+    return redirect('index_tutor')
+
+@decorators.checkGroup("Preceptors")
+@login_required
+def get_f2s(request):
+    query = Formulario2.objects.filter(preceptor__user=request.user)
+
+    a=[]
+    for i in query:
+        a.append({
+            'id': i.id,
+            'student': {
+                "first_name": i.student.first_name, 
+                "last_name": i.student.last_name,
+                "list_number": i.student.list_number},
+            'date': i.date,
+            'time': i.time,
+            'motivo': i.motivo,
+            'state': i.state,
+            })
+    return JsonResponse(a, safe=False)
+
+@decorators.checkGroup("Tutors")
+@login_required
+def get_childs_f2s(request):
+    childs = Parent.objects.filter(user=request.user).first().model.childs
+
+    query = None
+
+    for student in childs:
+        query = Q(student=student) if not query else query | Q(student=student)
+
+    f2s = Formulario2.objects.filter(query, date=timezone.now().today())
+
+    a=[]
+    for i in f2s:
+        a.append({
+            'id': i.id,
+            'student': {
+                "first_name": i.student.first_name, 
+                "last_name": i.student.last_name,
+                "list_number": i.student.list_number},
+            'date': i.date,
+            'time': i.time,
+            'motivo': i.motivo,
+            'state': i.state,
+            })
+    return JsonResponse(a, safe=False)
+
+@login_required
+def get_f2(request, pk):
+    i = Formulario2.objects.get(id=pk)
+
+    a = {
+        'id': i.id,
+        'student': {
+            "first_name": i.student.first_name, 
+            "last_name": i.student.last_name,
+            "list_number": i.student.list_number},
+        'date': i.date,
+        'time': i.time,
+        'motivo': i.motivo,
+        'state': i.state,
+        }
+
+    return JsonResponse(a)
+
+def register_device(request):
+    if request.method != "POST":
+        return HttpResponse(status=405)
+
+    device, created = Device.objects.get_or_create(token=request.POST['token'])
+
+    return JsonResponse({
+        'status': 1,
+        'device': device.id
+        })
+
+
+class LinkDevice(View, OAuthLibMixin):
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super(LinkDevice, self).dispatch(request, *args, **kwargs)
+    
+    def post(self, request):
+        device = Device.objects.get(id=request.POST.get("device"))
+        device.parent = Parent.objects.get(id=request.POST.get('parent'))
+        device.save()
+
+
+        
+        tok = generate_token()
+        token, created = tokensmod.AccessToken.objects.get_or_create(
+            user=device.parent.user,
+            application=settings.F2KENS_APPLICATION,
+            expires=datetime.date(
+                year=datetime.date.today().year,
+                month=12,
+                day=20),
+            token=tok)
+
+
+        reftok = generate_token()
+        tokensmod.RefreshToken.objects.get_or_create(
+            user=device.parent.user,
+            application=settings.F2KENS_APPLICATION,
+            token=reftok,
+            access_token=token)
+
+        data = {
+            'access_token': tok,
+            'refresh_token': reftok
+        }
+
+        fcm_service = settings.FCM_SERVICE
+        result = fcm_service.single_device_data_message(registration_id=device.token, data_message=data)
+        print(result)
+
+        return HttpResponse(status=200)
+
+

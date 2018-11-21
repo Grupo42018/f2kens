@@ -4,6 +4,7 @@ class F2KensConfig(AppConfig):
     name = 'f2kens'
 
     def ready(self):
+        import pyfcm
         from django.contrib.auth.models import Group
         from oauth2_provider import models as oauth2models
         tutors, created = Group.objects.get_or_create(name='Tutors')
@@ -18,4 +19,4 @@ class F2KensConfig(AppConfig):
 
         settings.F2KENS_APPLICATION = app
 
-        from .utils import tokens
+        settings.FCM_SERVICE = pyfcm.FCMNotification(settings.FCM_SETTINGS['api'])

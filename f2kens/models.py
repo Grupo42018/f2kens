@@ -116,8 +116,8 @@ class Parent(models.Model):
             
 
 class Device(models.Model):
-    token = models.ForeignKey(tokens.AccessToken, on_delete=models.PROTECT)
-    parent = models.OneToOneField(Parent, related_name="device", on_delete=models.CASCADE)
+    parent = models.OneToOneField(Parent, null=True, related_name="device", on_delete=models.CASCADE)
+    token = models.CharField(max_length=152, unique=True)
 
 
 class Formulario(models.Model):
@@ -140,6 +140,7 @@ class Formulario(models.Model):
             prec=self.preceptor)
 
 class Formulario2(Formulario):      ###clase formulario 2
+    finilized = models.BooleanField(default=False)
     state = models.CharField(
         max_length=50,
         choices=F2_STATES,
@@ -152,15 +153,35 @@ class Formulario2(Formulario):      ###clase formulario 2
 
     def save(self, *args, **kwargs):
         if not self.pk:
-            subject = "Su hijo {} puede retirarse temprano".format(self.student.first_name)
-            message = '127.0.0.1:8000/tutor/'
-            send_mail(
-                subject,
-                message,
-                settings.EMAIL_HOST_USER,
-                [x.email for x in ApiParent.filter(childs=self.student)],
-                fail_silently=False)
-        super(Formulario2, self).save(*args, **kwargs)
+            newModel = super(Formulario2, self).save(*args, **kwargs)
+            fcm_service = settings.FCM_SERVICE
+            
+            data = {
+                'id': self.id,
+                'student': {
+                    "first_name": self.student.first_name, 
+                    "last_name": self.student.last_name,
+                    "list_number": self.student.list_number},
+                'date': str(self.date),
+                'time': self.time,
+                'motivo': self.motivo,
+                'state': self.state,
+                }
+
+            for parent in Parent.filter_model(childs=self.student):
+                if (hasattr(parent,"device")):
+                    result = fcm_service.single_device_data_message(registration_id=parent.device.token, data_message=data)
+                else:
+                    subject = "Su hijo {} puede retirarse temprano".format(self.student.first_name)
+                    message = '127.0.0.1:8000/tutor/'
+                    send_mail(
+                        subject,
+                        message,
+                        settings.EMAIL_HOST_USER,
+                        [x.email for x in ApiParent.filter(childs=self.student)],
+                        fail_silently=False)
+            return newModel
+        return super(Formulario2, self).save(*args, **kwargs)
 
     def __str__(self):
         basestr = super().__str__()
