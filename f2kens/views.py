@@ -21,7 +21,6 @@ from oauthlib.common import generate_token
 
 from .models import *
 from .utils.apiModel import *
-from .utils import mixins
 from utils import decorators
 
 # TODO: Actualizar documentación de las vistas.
