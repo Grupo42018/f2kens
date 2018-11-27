@@ -31,7 +31,7 @@ def index_preceptor(request):
             preceptor__user=request.user,
             state='Rechazado'
         ),
-        'all_on-hold_f2': Formulario2.objects.filter(
+        'all_on_hold_f2': Formulario2.objects.filter(
             preceptor__user=request.user,
             state='En Espera'
         )

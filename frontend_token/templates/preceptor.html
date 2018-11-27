@@ -114,33 +114,48 @@
               </div>
               <div class='col-sm'>
                 <!-- Lux Approved F2 Card -->
+                {% for a in all_approved_f2 %}
                 <div class="card text-white bg-success mb-3" style="max-width: 20rem;">
-                  <div class="card-header">YYYY/MM/DD HH:MM</div>
+                  <div class="card-header"><center>{{a.date}} {{a.time}}</center></div>
                   <div class="card-body">
-                    <h4 class="card-title">Student name</h4>
-                    <p class="card-text">Reason</p>
+                    <h4 class="card-title">
+                      {{a.student.first_name}} 
+                      {{a.student.last_name}}
+                    </h4>
+                    <p class="card-text">{{a.motivo}}</p>
                   </div>
                 </div>
+                {% endfor %}
               </div>
               <div class='col-sm'>
                 <!-- Lux Rejected F2 Card -->
+                {% for r in all_rejected_f2 %}
                 <div class="card text-white bg-danger mb-3" style="max-width: 20rem;">
-                  <div class="card-header">YYYY/MM/DD HH:MM</div>
+                  <div class="card-header"><center>{{r.date}} {{r.time}}</center></div>
                   <div class="card-body">
-                    <h4 class="card-title">Student name</h4>
-                    <p class="card-text">Reason</p>
+                    <h4 class="card-title">
+                      {{r.student.first_name}} 
+                      {{r.student.last_name}}
+                    </h4>
+                    <p class="card-text">{{r.motivo}}</p>
                   </div>
                 </div>
+                {% endfor %}
               </div>
               <div class='col-sm'>
                 <!-- Lux On-Hold F2 Card -->
+                {% for oh in all_on_hold_f2 %}
                 <div class="card text-white bg-info mb-3" style="max-width: 20rem;">
-                  <div class="card-header">YYYY/MM/DD HH:MM</div>
+                  <div class="card-header"><center>{{oh.date}} {{oh.time}}</center></div>
                   <div class="card-body">
-                    <h4 class="card-title">Student name</h4>
-                    <p class="card-text">Reason</p>
+                    <h4 class="card-title">
+                      {{oh.student.first_name}} 
+                      {{oh.student.last_name}}
+                    </h4>
+                    <p class="card-text">{{oh.motivo}}</p>
                   </div>
                 </div>
+                {% endfor %}                
               </div>
             </div>
           </div>
