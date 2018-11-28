@@ -13,6 +13,7 @@ urlpatterns = [
     path('f2s/', get_childs_f2s, name="get_childs_f2s"),
     path('f2/<int:pk>', get_f2, name='f2'),
     path('get_years/', get_years, name="get_years"),
+    path('get_parents/<int:pk>', get_parents, name="get_parents"),
     path('reg_device/', csrf_exempt(register_device), name="reg_device"),
     path('lnk_device/', LinkDevice.as_view(), name="lnk_device"),
     ]

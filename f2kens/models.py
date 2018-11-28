@@ -170,7 +170,10 @@ class Formulario2(Formulario):      ###clase formulario 2
 
             for parent in Parent.filter_model(childs=self.student):
                 if (hasattr(parent,"device")):
-                    result = fcm_service.single_device_data_message(registration_id=parent.device.token, data_message=data)
+                    result = fcm_service.notify_single_device(
+                        registration_id=parent.device.token, 
+                        data_message=data,
+                        message_body=f"{data['student']['last_name']},{data['student']['first_name']} se puede retirar a partir de las {data['time']}")
                 else:
                     subject = "Su hijo {} puede retirarse temprano".format(self.student.first_name)
                     message = '127.0.0.1:8000/tutor/'

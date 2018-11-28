@@ -80,6 +80,10 @@ class APIModel(object):
     def __str__(self):
         return str(self._api_id)
 
+    @property
+    def id(self):
+        return self._api_id
+
     @classmethod
     def get_all(cls):
         """get_all
