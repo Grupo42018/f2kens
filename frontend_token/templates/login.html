@@ -26,6 +26,7 @@
 
 						<div class="container">
 							{% csrf_token %}
+							<input type="hidden" name="next" value="{{ next }}" />
 							<div class="form-group">
 								<label for="uname" class="label"><b>Usuario</b></label>
 								<input class="input" type="text" placeholder="Ingrese su usuario" name="username" required>
