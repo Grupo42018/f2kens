@@ -12,6 +12,23 @@ $('document').ready(function(){
 
     load_years()
     load_f2()
+
+    $('#parentsModal').on('shown.bs.modal', function (event) {
+        var button = $(event.relatedTarget)
+        var student = button.data("stud")
+        var modal = $(this)
+
+        modal.find(".modal-title").text(button.data("name"))
+        load_parent(student, modal);
+    })
+
+    $('#parentsModal').on('hidden.bs.modal', function (event) {
+        var modal = $(this)
+        modal.find("#parent-cards").empty()
+        if(global.scanner){
+            global.scanner.stop()
+        }
+    })
 });
 
 
@@ -97,4 +114,71 @@ function add_year_cb(year, first=false){
     div.append(label)
 
     list.append(div)
+}
+
+function load_parent(student, modal) {
+    $.ajax({
+        url:"/f2kens/get_parents/"+student
+    }).done((resp) => {
+        resp.forEach((item) =>{
+            modal.find("#parent-cards").append("\
+            <div class='col-md-5 col-sm-10 mx-auto'>\
+              <div class='card text-white bg-info'>\
+                <div class='card-header'>"+item.last_name+", "+item.first_name+"</div>\
+                <div class='card-body' style='display:flex'>\
+                  <div id='qrReplace-"+item.id+"' class='qr bg-dark'>\
+                  <center class='my-auto'>\
+                    <button class='btn btn-default' onClick='startQr("+item.id+")'>Link Device</button>\
+                  </center>\
+                  </div>\
+                </div>\
+              </div>\
+            </div>")
+        })
+    })
+}
+
+function startQr(item){
+    if(global.scanner){
+        global.scanner.stop()
+        var last = $("#qrReplace-"+global.scanner.scanId)
+        last.empty()
+        last.append("\
+            <center class='my-auto'>\
+              <button class='btn btn-default' onClick='startQr("+global.scanner.scanId+")'>Link Device</button>\
+            </center>");
+    }
+
+    var qr = $("#qrReplace-"+item)
+
+    qr.empty()
+    qr.append("<video id='qrVideo'></video>")
+
+    global.scanner = new Instascan.Scanner({ video: document.getElementById("qrVideo") });
+    global.scanner.scanId=item;
+
+    global.scanner.addListener('scan', function (content) {
+        $.ajax({
+            url: "/f2kens/lnk_device/",
+            method:'POST',
+            data: {
+                parent:item,
+                device:content
+            }
+        }).done((resp) => {
+            console.log(resp)
+        })
+        global.scanner.stop()
+      });
+
+
+    Instascan.Camera.getCameras().then(function (cameras) {
+        if (cameras.length > 0) {
+          global.scanner.start(cameras[0]);
+        } else {
+          console.error('No cameras found.');
+        }
+      }).catch(function (e) {
+        console.error(e);
+      });
 }
