@@ -111,7 +111,7 @@ def get_childs_f2s(request):
     for student in childs:
         query = Q(student=student) if not query else query | Q(student=student)
 
-    f2s = Formulario2.objects.filter(query, date=timezone.now().today())
+    f2s = Formulario2.objects.filter(query, date=timezone.now().today(), finalized=False)
 
     a=[]
     for i in f2s:
