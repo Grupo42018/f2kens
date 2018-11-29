@@ -8,12 +8,11 @@ from frontend_token import views
 urlpatterns = [
     path('', auth_views.login, {'template_name': 'login.html'}, name='login'),
     path('logout/', auth_views.logout, name='logout'),
-    path('checking_user/', f2kens.check_user_group_before_login, name='check_user'),
+    path('checking_user/', views.check_user_group_before_login, name='check_user'),
     path('preceptor/', views.index_preceptor, name='index_preceptor'),
     path('director/', views.index_director, name="index_director"),
     path('tutor/', views.index_tutor, name='index_tutor'),
     path('guard/', views.index_guard, name='index_guard'),
-    path('select_group/', f2kens.select_user_group, name='user_groups'),
     path('modal_preceptor/', views.modalpre, name="modalpre"),
     path('user/new/', views.createUser, name='createUser'),
     path('probando/', views.base),

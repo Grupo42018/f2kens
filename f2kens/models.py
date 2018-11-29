@@ -140,7 +140,7 @@ class Formulario(models.Model):
             prec=self.preceptor)
 
 class Formulario2(Formulario):      ###clase formulario 2
-    finilized = models.BooleanField(default=False)
+    finalized = models.BooleanField(default=False)
     state = models.CharField(
         max_length=50,
         choices=F2_STATES,
@@ -150,6 +150,9 @@ class Formulario2(Formulario):      ###clase formulario 2
     class Meta:
         verbose_name = 'F2'
         verbose_name_plural = 'F2es'
+
+    def updatable(self):
+        return (not self.finalized and self.date==datetime.date.today())
 
     def save(self, *args, **kwargs):
         if not self.pk:

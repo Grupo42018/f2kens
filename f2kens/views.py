@@ -24,32 +24,6 @@ from .utils.apiModel import *
 from .utils import token as token_utils
 from utils import decorators
 
-# TODO: Actualizar documentación de las vistas.
-
-def select_user_group(request):
-	query_set = Group.objects.filter(user=request.user)
-
-	return render(request, 'user_group.html', {'user_groups':query_set})
-
-@login_required
-def check_user_group_before_login(request):
-    '''
-    Esta vista busca si el usuario pertenece a un grupo de usuario
-    especifico y lo redirecciona a su correspondiente url.
-    '''
-    redirects = {
-        'Directives': redirect('index_director'),
-        'Preceptors': redirect('index_preceptor'),
-        'Tutors': redirect('index_tutor'),
-        'Guards': redirect('index_guard')
-    }
-
-    if request.user.groups.all().count() > 1:
-        return select_user_group(request)
-    
-    red = redirects.get(request.user.groups.first().name, redirect('login'))
-    return red
-
 @login_required
 @decorators.checkGroup("Preceptors")
 def create_f2(request):
@@ -100,7 +74,8 @@ def update_f2_state(request, form2_id):
     state = request.POST['estado']
 
     if (form.student in parent.model.childs 
-       and state in valid_fields):
+       and state in valid_fields
+       and form.updatable()):
         form.state = state
         form.save()
         return HttpResponse(status=205)
@@ -109,7 +84,7 @@ def update_f2_state(request, form2_id):
 @login_required
 @decorators.checkGroup("Preceptors")
 def get_f2s(request):
-    query = Formulario2.objects.filter(preceptor__user=request.user, date=datetime.date.today())
+    query = Formulario2.objects.filter(preceptor__user=request.user, date=datetime.date.today(), finalized=False)
 
     a=[]
     for i in query:
@@ -183,6 +158,29 @@ def get_f2(request, pk):
 
     return JsonResponse(a)
 
+@decorators.checkGroup("Guards")
+def finishF2(request):
+    if request.method != "POST":
+        return HttpResponse(status=405)
+
+    f2 = Formulario2.objects.get(id=request.POST["id"])
+    f2.finalized = True
+    f2.save()
+
+    return redirect("index_guard")
+
+@decorators.checkGroup("Guards")
+def unfinishF2(request):
+    if request.method != "POST":
+        return HttpResponse(status=405)
+
+    f2 = Formulario2.objects.get(id=request.POST["id"])
+    f2.finalized = False
+    f2.save()
+
+    return redirect("index_guard")
+
+
 def register_device(request):
     if request.method != "POST":
         return HttpResponse(status=405)
@@ -216,5 +214,3 @@ class LinkDevice(View, OAuthLibMixin):
         print(result)
 
         return HttpResponse(status=200)
-
-

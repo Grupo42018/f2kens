@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'f2kens.apps.F2KensConfig',
     'frontend_token',
     'oauth2_provider',
+    'rest_framework',
 ]
 
 AUTHENTICATION_BACKENDS = (
@@ -145,6 +146,11 @@ LOGIN_REDIRECT_URL = 'check_user'
 LOGOUT_REDIRECT_URL = 'login'
 LOGIN_URL = 'login'
 
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}
 
 ASISTENCIA={
     'API': '127.0.0.1',
