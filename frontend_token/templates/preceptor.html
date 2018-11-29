@@ -54,15 +54,14 @@
         <div class="tab-pane active" id="f2">
           <div class="jumbotron">
             <div class="container">
-              <h1 class="display-4">Create F2</h1>
+              <h1 class="display-4">Enviar F2</h1>
               <form action="{% url 'create_f2' %}" method="POST" accept-charset="utf-8">
                 {% csrf_token %}
                 <!-- Aqui va el F2 -->
                 <div class="form-group">
                   <fieldset class="checkboxgroup" id="yearCheckbox">
                     <div class="row">
-                      <legend class="col-md-3 col-sm-12">Select Year</legend>
-                      <input class="col-md-3 offset-md-6" placeholder="Filter" type="text" id="year-filter-f2">
+                      <legend class="col-sm-12">Seleccione un curso:</legend>
                     </div>
                     <div class="row" id="yearlist">
 
@@ -72,16 +71,16 @@
                 
                 <div class="form-row">
                   <div class="form-group col-md-6 col-sm-12">
-                    <label for="time">Hour</label>
+                    <label for="time">Hora</label>
                     <input type="time" class="form-control" name="time" id="time">
                   </div>
 
                   <div class="form-group col-md-6 col-sm-12">
-                    <label for="reason">Reason</label>
+                    <label for="reason">Motivo</label>
                     <input type="text" name="reason" class="form-control">
                   </div>
                 </div>
-                <button type="submit" class="btn">Create</button>
+                <button type="submit" class="btn">Enviar</button>
               </form>
             </div>
           </div>
@@ -144,7 +143,7 @@
                             data-stud='{{ student.id }}' 
                             data-name='{{ student.last_name }} {{ student.first_name }}'
                             class="btn btn-primary">
-                              Parents
+                              Tutores
                           </button>
                         </li>
                       </ul>
