@@ -1,3 +1,4 @@
+import getpass
 from django.apps import AppConfig
 from django.conf import settings
 from django.core.mail import send_mail
@@ -56,8 +57,6 @@ class F2KensConfig(AppConfig):
 
             preceptors.user_set.add(user)
 
-            print(preceptor.first_name)
-
             try:
                 new, created = models.Preceptor.objects.get_or_create(model=preceptor, user=user)
             except Exception as e:
@@ -69,13 +68,28 @@ class F2KensConfig(AppConfig):
                 send_init_mail(user.username, passw)
                 del passw
 
+        if not User.objects.filter(is_superuser=True).first():
+            print("Creando super usuario")
+            while True:
+                email = input("email: ")
+                username = input("nombre de usuario: ")
+                print("Los caracteres escritos no se mostraran pero seran leiodos")
+                passw = getpass.getpass("contrasena: ")
+                try:
+                    User.objects.create_superuser(email=email, username=username, passw=passw)
+                except e:
+                    print(e)
+
 def send_init_mail(user, pas):
     subject = "Su usuario de f2kens fue creado"
     message = 'Ya puede ingresar a la pagina de notificaciones con:\n\
         \tusuario: {}\n\
         \tcontrasena: {}'.format(user, pas)
+
+    print(user)
     send_mail(
         subject,
         message,
+        settings.EMAIL_HOST_USER,
         [user],
         fail_silently=False)
