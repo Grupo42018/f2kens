@@ -68,6 +68,7 @@ class F2KensConfig(AppConfig):
                 send_init_mail(user.username, passw)
                 del passw
 
+
         if not User.objects.filter(is_superuser=True).first():
             print("Creando super usuario")
             while True:
@@ -77,7 +78,8 @@ class F2KensConfig(AppConfig):
                 passw = getpass.getpass("contrasena: ")
                 try:
                     User.objects.create_superuser(email=email, username=username, passw=passw)
-                except e:
+                    break
+                except Exception as e:
                     print(e)
 
 def send_init_mail(user, pas):
