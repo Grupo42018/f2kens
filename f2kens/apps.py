@@ -48,6 +48,7 @@ class F2KensConfig(AppConfig):
             if created:
                 passw = common.generate_token()
                 user.set_password(passw)
+                user.save()
                 send_init_mail(user.username, passw)
                 del passw
 
@@ -65,6 +66,7 @@ class F2KensConfig(AppConfig):
             if created:
                 passw = common.generate_token()
                 user.set_password(passw)
+                user.save()
                 send_init_mail(user.username, passw)
                 del passw
 
@@ -77,7 +79,7 @@ class F2KensConfig(AppConfig):
                 print("Los caracteres escritos no se mostraran pero seran leiodos")
                 passw = getpass.getpass("contrasena: ")
                 try:
-                    User.objects.create_superuser(email=email, username=username, passw=passw)
+                    User.objects.create_superuser(email=email, username=username, password=passw)
                     break
                 except Exception as e:
                     print(e)
@@ -88,7 +90,6 @@ def send_init_mail(user, pas):
         \tusuario: {}\n\
         \tcontrasena: {}'.format(user, pas)
 
-    print(user)
     send_mail(
         subject,
         message,
