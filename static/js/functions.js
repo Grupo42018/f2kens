@@ -11,8 +11,6 @@ $('document').ready(function(){
         })
     }
 
-
-
     $('#qrScan').on('shown.bs.modal', function (event) {
         var button = $(event.relatedTarget)
         var parent = button.data("parent")

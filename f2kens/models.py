@@ -84,46 +84,29 @@ class ApiAbsence(apiModel.APIModelSaveable):
     student = apiModel.Field(ApiStudent)
 
 
-
-class Preceptor(models.Model):
+class Preceptor(models.Model, apiModel.ApiModelMixin):
     model=apiModel.ApiField(ApiPreceptor, unique=True)
     user=models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-
-    @classmethod
-    def filter_model(cls, **kwargs):
-        for i in cls.objects.all():
-            comp = True
-            for key in kwargs.keys():
-                if kwargs[key] != getattr(i.model, key):
-                    comp = False
-                    continue
-            if comp:
-                yield i
 
     def __str__(self):
         return "{model.last_name}, {model.first_name}".format(model=self.model)
 
 
-class Parent(models.Model):
+class Parent(models.Model, apiModel.ApiModelMixin):
     model = apiModel.ApiField(ApiParent, unique=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-
-    @classmethod
-    def filter_model(cls, **kwargs):
-        for i in cls.objects.all():
-            comp = True
-            for key in kwargs.keys():
-                if kwargs[key] not in getattr(i.model, key):
-                    comp = False
-                    continue
-            if comp:
-                yield i
             
 
 class Device(models.Model):
     parent = models.OneToOneField(Parent, null=True, related_name="device", on_delete=models.CASCADE)
     token = models.CharField(max_length=152, unique=True)
-
+    # brand = models.CharField(max_length=128)
+    # deviceId 
+    # name
+    # manufacturer
+    # model
+    # systemVersion
+    # systemType
 
 class Formulario(models.Model):
     student = apiModel.ApiField(ApiStudent)
@@ -136,6 +119,7 @@ class Formulario(models.Model):
         abstract=True
         verbose_name='Formulario'
         verbose_name_plural='Formularios'
+        unique_together = (("student", "date"),)
 
     def __str__(self):
         return '{stud} {date} {time} {prec}'.format(
@@ -143,6 +127,7 @@ class Formulario(models.Model):
             date=self.date, 
             time=self.time, 
             prec=self.preceptor)
+
 
 class Formulario2(Formulario):      ###clase formulario 2
     finalized = models.BooleanField(default=False)
@@ -155,6 +140,7 @@ class Formulario2(Formulario):      ###clase formulario 2
     class Meta:
         verbose_name = 'F2'
         verbose_name_plural = 'F2es'
+        unique_together = ("student", "date")
 
     def updatable(self):
         return (not self.finalized and self.date==datetime.date.today())
@@ -210,12 +196,8 @@ class Formulario3(Formulario):      ###clase formulario 3
 
       
 class Guard(models.Model):
-    schedule = models.CharField(max_length=100)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     firstname = models.CharField(max_length=100)
     lastname = models.CharField(max_length=100)
+    email = models.EmailField()
     dni = models.IntegerField()
-
-    
-class Exit(models.Model):
-    schedule = models.DateTimeField(auto_now_add=True, blank=True)
-    student = apiModel.ApiField(ApiStudent, unique=True)

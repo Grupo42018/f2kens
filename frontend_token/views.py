@@ -50,31 +50,34 @@ def index_preceptor(request):
         'years': Preceptor.objects.get(user=request.user).model.year,
         'all_approved_f2': Formulario2.objects.filter(
             preceptor__user=request.user,
+            date=timezone.now().today(),
             state='Aprobado'
         ),
         'all_rejected_f2': Formulario2.objects.filter(
             preceptor__user=request.user,
+            date=timezone.now().today(),
             state='Rechazado'
         ),
         'all_on_hold_f2': Formulario2.objects.filter(
             preceptor__user=request.user,
+            date=timezone.now().today(),
             state='En Espera'
         )
     }
 
-    return render(request, 'preceptor_LUX.html', context)
+    return render(request, 'preceptor.html', context)
 
 @decorators.checkGroup("Guards")
 def index_guard(request):
-    return render(request, 'guard.html', {"exits":Formulario2.objects.filter(state="Aprobado")})
+    return render(request, 'guard.html', {"exits":Formulario2.objects.filter(state="Aprobado", date=timezone.now().today())})
 
 @decorators.checkGroup("Tutors")
 def index_tutor(request):
     get_forms2=[]
     parent = Parent.objects.get(user=request.user)
     for student in parent.model.childs:
-        get_forms2.append(Formulario2.objects.filter(student=student, date=datetime.date.today(), finalized=False))
-    return render(request, 'tutor.html', {'formularios2': get_forms2})
+        get_forms2.append(Formulario2.objects.filter(student=student, date=timezone.now().today(), finalized=False))
+    return render(request, 'tutor.html', {'formularios2': get_forms2, 'parent':parent})
 
 def createUser(request):
     form = userForm()
