@@ -62,7 +62,7 @@ def index_preceptor(request):
         )
     }
 
-    return render(request, 'preceptor.html', context)
+    return render(request, 'preceptor_LUX.html', context)
 
 @decorators.checkGroup("Guards")
 def index_guard(request):

@@ -54,6 +54,11 @@ class ApiStudent(apiModel.APIModel):
     status = apiModel.Field(str, choices=STATUS_CHOICES)
     year = apiModel.Field(ApiYear)
 
+    def parents(self):
+        parents = Parent.filter_model(childs=self)
+        for parent in parents:
+            yield parent
+
 
 class ApiParent(apiModel.APIModel):
     _url = 'parents/'
