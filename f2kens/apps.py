@@ -1,18 +1,22 @@
 from django.apps import AppConfig
 from django.conf import settings
+from django.core.mail import send_mail
 class F2KensConfig(AppConfig):
     name = 'f2kens'
 
     def ready(self):
-        import pyfcm
+        import sys
         
+        import pyfcm
         from django.contrib.auth.models import Group, User
         from oauth2_provider import models as oauth2models
-        from django.core.mail import send_mail
         from oauthlib import common
 
         from . import models
-        
+
+        if ('makemigrations' in sys.argv or 'migrate' in sys.argv):
+            return 
+
         #create the user groups
         tutors, created = Group.objects.get_or_create(name='Tutors')
         directives, created = Group.objects.get_or_create(name='Directives')
@@ -34,10 +38,13 @@ class F2KensConfig(AppConfig):
             user, created = User.objects.get_or_create(username=parent.email)
 
             tutors.user_set.add(user)
+
             try:
                 new = models.Parent.objects.create(model=parent, user=user)
             except:
                 pass
+
+
             if created:
                 passw = common.generate_token()
                 user.set_password(passw)
@@ -46,13 +53,17 @@ class F2KensConfig(AppConfig):
 
         #create or get the parents
         for preceptor in models.ApiPreceptor.get_all():
-            user, created = User.objects.get_or_create(username=parent.email)
+            user, created = User.objects.get_or_create(username=preceptor.email)
 
             preceptors.user_set.add(user)
+
+            print(preceptor.first_name)
+
             try:
-                new = models.Preceptor.objects.create(model=preceptor, user=user)
-            except:
-                pass
+                new, created = models.Preceptor.objects.get_or_create(model=preceptor, user=user)
+            except Exception as e:
+                print(e)
+                
 
             if created:
                 passw = common.generate_token()
@@ -60,18 +71,14 @@ class F2KensConfig(AppConfig):
                 send_init_mail(user.username, passw)
                 del passw
 
-        staff = User.objects.filter(is_staff=True).first()
-
-        
-
 def send_init_mail(user, pas):
     subject = "Su usuario de f2kens fue creado"
     message = 'Ya puede ingresar a la pagina de notificaciones con:\n\
         \tusuario: {}\n\
-        \tcontrasena: {}'.format(user, passw)
+        \tcontrasena: {}'.format(user, pas)
     send_mail(
         subject,
         message,
         settings.EMAIL_HOST_USER,
-        [user.username],
+        [user],
         fail_silently=False)
