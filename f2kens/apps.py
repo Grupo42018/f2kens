@@ -16,7 +16,7 @@ class F2KensConfig(AppConfig):
 
         if ('makemigrations' in sys.argv or 'migrate' in sys.argv):
             return 
-
+          
         #create the user groups
         tutors, created = Group.objects.get_or_create(name='Tutors')
         directives, created = Group.objects.get_or_create(name='Directives')
@@ -38,13 +38,12 @@ class F2KensConfig(AppConfig):
             user, created = User.objects.get_or_create(username=parent.email)
 
             tutors.user_set.add(user)
-
+            
             try:
                 new = models.Parent.objects.create(model=parent, user=user)
             except:
                 pass
-
-
+              
             if created:
                 passw = common.generate_token()
                 user.set_password(passw)
@@ -62,8 +61,7 @@ class F2KensConfig(AppConfig):
             try:
                 new, created = models.Preceptor.objects.get_or_create(model=preceptor, user=user)
             except Exception as e:
-                print(e)
-                
+                pass
 
             if created:
                 passw = common.generate_token()
@@ -79,6 +77,5 @@ def send_init_mail(user, pas):
     send_mail(
         subject,
         message,
-        settings.EMAIL_HOST_USER,
         [user],
         fail_silently=False)
