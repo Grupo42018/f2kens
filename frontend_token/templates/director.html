@@ -3,9 +3,53 @@
 	<title>Directivo</title>
 {% endblock head %}
 
-{% block brand %}Directivo{% endblock brand %}
+{% block brand %}Directivo: {{user|upper}}{% endblock brand %}
 
 
 {% block content %}
-	
+<!-- Relacionar con el tab profile-->
+<div class="container">
+  <div class="row">
+    <!-- Editar Perfil -->
+    <div class="col">
+      <center>
+        <div class="jumbotron" style="background-color: #ededed">
+          <h3 class="display-4">CARGAR A UN GUARDIA</h3>
+          <hr class="my-4">
+          <form method="POST" action="/" accept-charset="utf-8">
+            {% csrf_token %}
+            <div class="form-group">
+              <label class="col-form-label col-form-label-lg" for="inputLarge">Usuario:</label>
+              <input class="form-control form-control-lg" name="user" placeholder="Usuario" id="inputLarge" type="text">
+            </div>
+            <div class="form-group">
+              <label class="col-form-label col-form-label-lg" for="inputLarge">Contraseña:</label>
+              <input class="form-control form-control-lg" name="password" placeholder="Contraseña" id="inputLarge" type="password">
+            </div>
+            <div class="form-group">
+              <label class="col-form-label col-form-label-lg" for="inputLarge">Nombre:</label>
+              <input class="form-control form-control-lg" name="first_name" placeholder="Nombre" id="inputLarge" type="text">
+            </div>
+            <div class="form-group">
+              <label class="col-form-label col-form-label-lg" for="inputLarge">Apellido:</label>
+              <input class="form-control form-control-lg" name="last_name" placeholder="Apellido" id="inputLarge" type="text">
+            </div>
+						<div class="form-group">
+              <label class="col-form-label col-form-label-lg" for="inputLarge">D.N.I.:</label>
+              <input class="form-control form-control-lg" name="last_name" placeholder="DNI" id="inputLarge" type="text">
+            </div>
+            <div class="form-group">
+              <label class="col-form-label col-form-label-lg" for="inputLarge">Email</label>
+              <input class="form-control form-control-lg" name="email" placeholder="ejemplo@ejemplo.com" id="inputLarge" type="text">
+            </div>
+            <hr class="my-4">
+            <p class="lead">
+              <button class="btn btn-outline-primary btn-lg" type="submit">CARGAR GUARDIA</button>
+            </p>
+          </form>
+        </div>
+      </center>
+    </div>
+  </div>
+</div>
 {% endblock content %}
