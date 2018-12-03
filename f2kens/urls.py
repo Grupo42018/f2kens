@@ -16,6 +16,7 @@ urlpatterns = [
     path('get_parents/<int:pk>', get_parents, name="get_parents"),
     path('reg_device/', csrf_exempt(register_device), name="reg_device"),
     path('lnk_device/', LinkDevice.as_view(), name="lnk_device"),
+    path('rvk_device/', revoke_device, name="rvk_device"),
     path('finishF2/', finishF2, name="finishF2"),
     path('unfinishF2/', unfinishF2, name="unfinishF2"),
     ]

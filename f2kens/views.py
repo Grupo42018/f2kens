@@ -40,10 +40,13 @@ def create_f2(request):
     motive = request.POST['reason']
     # Create the Form object
 
-    for student in students:
-        new_F2 = Formulario2(student=student, time=time, preceptor=preceptor, motivo=motive)
-        new_F2.save() # Save the F2 object
-
+    try:
+        
+        for student in students:
+            new_F2 = Formulario2(student=student, time=time, preceptor=preceptor, motivo=motive)
+            new_F2.save() # Save the F2 object
+    except Exception as e:
+        return redirect('index_preceptor')
     return redirect('index_preceptor')
 
 @login_required
@@ -78,7 +81,7 @@ def update_f2_state(request, form2_id):
        and form.updatable()):
         form.state = state
         form.save()
-        return HttpResponse(status=205)
+        return redirect('index_tutor')
     return HttpResponse(status=403)
 
 @login_required
@@ -214,3 +217,17 @@ class LinkDevice(View, OAuthLibMixin):
         print(result)
 
         return HttpResponse(status=200)
+
+@decorators.checkGroup("Tutors")
+@login_required
+def revoke_device(request):
+    access_tokens = tokensmod.AccessToken.objects.filter(user=request.user)
+
+    for token in access_tokens:
+        tokensmod.RefreshToken.objects.get(token=token).delete()
+        token.delete()
+
+    dev = Device.objects.get(parent__user=request.user)
+    dev.parent = None
+    dev.save()
+    return HttpResponse(status=205)

@@ -73,8 +73,8 @@ class APIModel(object):
 
     def __eq__(self, other):
         if not isinstance(other, self.__class__):
-            print(f"{other.__class__} {self.__class__}")
             return False
+
         return self._api_id == other._api_id
 
     def __str__(self):
@@ -426,3 +426,15 @@ if res.status == 404:
     raise NotFoundError(
         "The API route set hasn't been found in the selected API host")
 
+
+class ApiModelMixin:
+    @classmethod
+    def filter_model(cls, **kwargs):
+        for i in cls.objects.all():
+            comp = True
+            for key in kwargs.keys():
+                if kwargs[key] not in getattr(i.model, key):
+                    comp = False
+                    continue
+            if comp:
+                yield i
