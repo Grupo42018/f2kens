@@ -43,7 +43,10 @@ function startQr(item){
                 device:content
             }
         }).done((resp) => {
-            console.log(resp)
+            if (!location.toString().endsWith('#students')){
+                location += "#students"
+            }
+            location.reload()
         })
         global.scanner.stop()
       });

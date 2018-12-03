@@ -224,7 +224,7 @@ def revoke_device(request):
     access_tokens = tokensmod.AccessToken.objects.filter(user=request.user)
 
     for token in access_tokens:
-        tokensmod.RefreshToken.objects.get(token=token).delete()
+        tokensmod.RefreshToken.objects.get(access_token=token).delete()
         token.delete()
 
     dev = Device.objects.get(parent__user=request.user)

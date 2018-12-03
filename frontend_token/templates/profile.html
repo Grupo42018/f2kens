@@ -1,0 +1,47 @@
+{% extends "base_lux.html" %}
+
+{% block head %}
+  <title>Perfil</title>
+{% endblock head %}
+
+{% block brand %}Perfil{% endblock brand %}
+
+{% block tabs %}
+  <li class="nav-item">
+    <a class="nav-link" href="/checking_user"`>Inicio</a>
+  </li>
+{% endblock tabs %}
+
+{% block content %}
+<!-- Relacionar con el tab profile-->
+<div class="container">
+  <div class="row">
+
+    <!-- Editar Perfil -->
+    <div class="mx-auto col-lg-6 col-md-9 col-sm-12">
+      <center>
+        <div class="jumbotron" style="background-color: #ededed">
+          <h3>EDITAR CONTRASEÑA</h3>
+          <hr class="my-4">
+          <form method="POST" action="/profile/" accept-charset="utf-8">
+            {% csrf_token %}
+            <div class="form-group">
+              <label class="col-form-label col-form-label-lg" for="inputLarge">Contraseña Actual</label>
+              <input class="form-control form-control-lg" name="passwordOld" placeholder="Contraseña" id="inputLarge" type="password">
+              <label class="col-form-label col-form-label-lg" for="inputLarge">Nueva Contraseña</label>
+              <input class="form-control form-control-lg" name="passwordNew" placeholder="Contraseña" id="inputLarge" type="password">
+              <label class="col-form-label col-form-label-lg" for="inputLarge">Repetir Contraseña</label>
+              <input class="form-control form-control-lg" name="passwordRep" placeholder="Contraseña" id="inputLarge" type="password">
+            </div>
+            <p class="lead">
+              <button class="btn btn-outline-primary btn-lg" type="submit">GUARDAR CAMBIOS</button><br/>
+              Debera relogearse
+            </p>
+          </form>
+        </div>
+      </center>
+    </div>
+
+  </div>
+</div>
+{% endblock content %}

@@ -79,16 +79,16 @@ def index_tutor(request):
         get_forms2.append(Formulario2.objects.filter(student=student, date=timezone.now().today(), finalized=False))
     return render(request, 'tutor.html', {'formularios2': get_forms2, 'parent':parent})
 
-def createUser(request):
-    form = userForm()
-    return render(request, 'form.html', {'form': form})
-
-def base(request):
-    return render(request, 'base.html')
-
-
-class RegistroUsuario(CreateView):
-    model = User
-    template_name = "form.html"
-    form_class = UserCreationForm
-    success_url = reverse_lazy('check_user')
+@login_required
+def profile(request):
+    if request.method == "POST":
+        if (request.user.check_password(request.POST['passwordOld'])): 
+            if request.POST['passwordNew'] == request.POST['passwordRep']:
+                request.user.set_password(request.POST['passwordNew'])
+                request.user.save()
+                return redirect('profile')
+            else:
+                return render(request, 'profile.html', {'error': "Las nuevas contrasenas no coinciden"})
+        else:
+            return render(request, 'profile.html', {'error': "La contrasena original es incorrecta"})
+    return render(request, "profile.html")
