@@ -4,12 +4,17 @@
     <title>Tutor</title>
 {% endblock head  %}
 {% block brand %}
-    Tutor
+    Tutor: {{user|upper}}
 {% endblock brand %}
+{% block tabs %}
+<li class="nav-item">
+  <a class="nav-link active" href="/profile"`>Mi perfil</a>
+</li>
+{% endblock tabs %}
 {% block content %}
 <div class='container'>
   <div class='row'>
-    
+
     <div class="col-lg-5 col-sm-12 mx-auto">
       <div class="card border-primary mb-3" >
         <div class="card-header">Dispositivo</div>
@@ -28,17 +33,17 @@
         </div>
       </div>
     </div>
-      
+
     <div class='col-lg-6 col-sm-12 mx-auto row'>
-  {% for studentF2 in formularios2 %}  
+  {% for studentF2 in formularios2 %}
     {% for form in studentF2 %}
     <div class='col-lg-6'>
-      
-      <div class="card 
+
+      <div class="card
         {% if form.state == 'Rechazado' %}
-          bg-danger text-white 
-        {% elif form.state == 'Aprobado' %} 
-          bg-success text-white 
+          bg-danger text-white
+        {% elif form.state == 'Aprobado' %}
+          bg-success text-white
         {% else %}
           bg-secondary
         {% endif %}
@@ -46,7 +51,7 @@
         <div class="card-header"><center>{{form.date}} {{form.time}}</center></div>
         <div class="card-body">
           <h4 class="card-title">
-            {{form.student.first_name}} 
+            {{form.student.first_name}}
             {{form.student.last_name}}
           </h4>
           <p class="card-text">{{form.motivo}}</p>
