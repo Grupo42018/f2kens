@@ -13,7 +13,6 @@ urlpatterns = [
     path('director/', views.index_director, name="index_director"),
     path('tutor/', views.index_tutor, name='index_tutor'),
     path('guard/', views.index_guard, name='index_guard'),
-    path('modal_preceptor/', views.modalpre, name="modalpre"),
     path('profile/', views.profile, name="profile"),
 ]
 	

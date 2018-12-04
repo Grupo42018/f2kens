@@ -231,3 +231,14 @@ def revoke_device(request):
     dev.parent = None
     dev.save()
     return HttpResponse(status=205)
+
+@decorators.checkGroup("Directives")
+@login_required
+def remove_guard(request):
+    if request.method=="POST":
+        guard = Guard.objects.get(id=request.POST['guard'])
+        user = guard.user
+        guard.delete()
+        user.delete()
+        return redirect('index_director')
+    return HttpResponse(status=403)

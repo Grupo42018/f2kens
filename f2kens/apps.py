@@ -36,7 +36,12 @@ class F2KensConfig(AppConfig):
 
         #create or get the parents
         for parent in models.ApiParent.get_all():
-            user, created = User.objects.get_or_create(username=parent.email)
+            user, created = User.objects.get_or_create(
+                username=parent.email.split("@")[0],
+                email=parent.email)
+
+            user.first_name=parent.first_name
+            user.last_name=parent.last_name
 
             tutors.user_set.add(user)
             
@@ -48,13 +53,19 @@ class F2KensConfig(AppConfig):
             if created:
                 passw = common.generate_token()
                 user.set_password(passw)
-                user.save()
-                send_init_mail(user.username, passw)
+                send_init_mail(user.email, user.username, passw)
                 del passw
+            
+            user.save()
 
         #create or get the parents
         for preceptor in models.ApiPreceptor.get_all():
-            user, created = User.objects.get_or_create(username=preceptor.email)
+            user, created = User.objects.get_or_create(
+                username=preceptor.email.split("@")[0],
+                email=preceptor.email)
+
+            user.first_name=preceptor.first_name
+            user.last_name=preceptor.last_name
 
             preceptors.user_set.add(user)
 
@@ -66,9 +77,10 @@ class F2KensConfig(AppConfig):
             if created:
                 passw = common.generate_token()
                 user.set_password(passw)
-                user.save()
-                send_init_mail(user.username, passw)
+                send_init_mail(user.email, user.username, passw)
                 del passw
+            
+            user.save()
 
 
         if not User.objects.filter(is_superuser=True).first():
@@ -84,7 +96,7 @@ class F2KensConfig(AppConfig):
                 except Exception as e:
                     print(e)
 
-def send_init_mail(user, pas):
+def send_init_mail(email, user, pas):
     subject = "Su usuario de f2kens fue creado"
     message = 'Ya puede ingresar a la pagina de notificaciones con:\n\
         \tusuario: {}\n\
@@ -94,5 +106,5 @@ def send_init_mail(user, pas):
         subject,
         message,
         settings.EMAIL_HOST_USER,
-        [user],
+        [email],
         fail_silently=False)

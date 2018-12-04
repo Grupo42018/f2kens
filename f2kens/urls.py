@@ -19,4 +19,5 @@ urlpatterns = [
     path('rvk_device/', revoke_device, name="rvk_device"),
     path('finishF2/', finishF2, name="finishF2"),
     path('unfinishF2/', unfinishF2, name="unfinishF2"),
+    path('rm_guard/', remove_guard, name="remove_guard"),
     ]
