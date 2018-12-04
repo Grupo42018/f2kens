@@ -11,6 +11,22 @@ $('document').ready(function(){
         })
     }
 
+    $("#f2Form").find("#subF2").on('click', (e) => {
+        var form = $('#f2Form')
+        $.ajax({
+            url: '/f2kens/create_f2/',
+            method: 'POST',
+            data: getFormData(form)
+        }).then((data) => {
+            location.reload()
+        }).catch((e) => {
+            for (var key in e.responseJSON){
+                $('#'+key)[0].classList.add('is-invalid')
+                $("#error"+key)[0].innerHTML = e.responseJSON[key][0]
+            }
+        })
+    })
+
     $('#qrScan').on('shown.bs.modal', function (event) {
         var button = $(event.relatedTarget)
         var parent = button.data("parent")
@@ -29,6 +45,17 @@ $('document').ready(function(){
         }
     })
 });
+
+function getFormData(form) {
+    var rawJson = form.serializeArray();
+    var model = {};
+
+    $.map(rawJson, function (n, i) {
+        model[n['name']] = n['value'];
+    });
+
+    return model;
+}
 
 function startQr(item){
     global.scanner = new Instascan.Scanner({ video: document.getElementById("qrVideo") });

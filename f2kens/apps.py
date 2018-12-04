@@ -91,7 +91,8 @@ class F2KensConfig(AppConfig):
                 print("Los caracteres escritos no se mostraran pero seran leiodos")
                 passw = getpass.getpass("contrasena: ")
                 try:
-                    User.objects.create_superuser(email=email, username=username, password=passw)
+                    new = User.objects.create_superuser(email=email, username=username, password=passw)
+                    directives.user_set.add(new)
                     break
                 except Exception as e:
                     print(e)

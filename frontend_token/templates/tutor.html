@@ -1,7 +1,9 @@
 {% extends 'base_lux.html' %}
-
+{% load static %}
 {% block head %}
     <title>Tutor</title>
+
+    <script src="{% static "js/tutor.js" %}" type="text/javascript" charset="utf-8"></script>
 {% endblock head  %}
 {% block brand %}
     Tutor: {{user|upper}}
