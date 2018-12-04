@@ -197,7 +197,4 @@ class Formulario3(Formulario):      ###clase formulario 3
       
 class Guard(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    firstname = models.CharField(max_length=100)
-    lastname = models.CharField(max_length=100)
-    email = models.EmailField()
     dni = models.IntegerField()

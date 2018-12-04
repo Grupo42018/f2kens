@@ -5,6 +5,7 @@ from django.contrib.auth.models import Group, User
 from django.contrib.auth.forms import UserCreationForm
 from django.views.generic import CreateView
 from django.urls import reverse_lazy
+from oauthlib.common import generate_token
 
 from f2kens.models import *
 from utils import decorators
@@ -34,14 +35,46 @@ def check_user_group_before_login(request):
     red = redirects.get(request.user.groups.first().name, redirect('login'))
     return red
 
+@decorators.checkGroup("Directives")
 def index_director(request):
-    return render(request, 'director.html')
+    if request.method == "POST":
+        first_name = request.POST['first_name']
+        last_name = request.POST['last_name']
+        dni = request.POST['dni']
+        email = request.POST['email']
+        passw = generate_token()
 
-def modalpre(request):
-    return render(request, 'modalpre.html')
+        users = User.objects.filter(username__iregex=r"^{}.{}".format(last_name.split(" ")[0], first_name.split(" ")[0]))
 
-def index(request):
-    return render(request, 'index.html')
+        if not users.first():
+            username = "{}.{}".format(last_name.split(" ")[0], first_name.split(" ")[0])
+        else:
+            users = User.objects.filter(username__iregex=r"^{}.{}".format(last_name.split(" ")[0], first_name.split(" ")[0])).order_by('username')
+            usplit = users.last().username.split('-')
+            last = 0 if len(usplit)==1 else int(usplit[1])
+            username = "{}.{}-{}".format(last_name.split(" ")[0], first_name.split(" ")[0], last+1)
+
+        new = User.objects.create(
+            username=username, 
+            password=passw,
+            email=email,
+            first_name=first_name,
+            last_name=last_name)
+
+        Guard.objects.create(user=new, dni=dni)
+
+        subject = "Su cuenta de f2kens sido creada"
+        message = "Para entrar utilice las siguientes credenciales: \n\tUsuario: {}\n\tContrasena: {}".format(username, passw)
+        send_mail(
+            subject,
+            message,
+            settings.EMAIL_HOST_USER,
+            [email],
+            fail_silently=False)
+
+        Group.objects.get(name="Guards").user_set.add(new)
+
+    return render(request, 'director.html', {"guards": Guard.objects.all()})
 
 @decorators.checkGroup("Preceptors")
 def index_preceptor(request):

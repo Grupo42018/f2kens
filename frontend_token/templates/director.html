@@ -3,9 +3,79 @@
 	<title>Directivo</title>
 {% endblock head %}
 
-{% block brand %}Directivo{% endblock brand %}
+{% block brand %}Directivo: {{user|upper}}{% endblock brand %}
 
 
 {% block content %}
-	
+<!-- Relacionar con el tab profile-->
+<div class="container">
+  <div class="row">
+    <!-- Editar Perfil -->
+    <div class="col-md-5 col-sm-12">
+
+      <div class="card mb-3" style="background-color: #ededed">
+        <h3 class="card-header">CARGAR A UN GUARDIA</h3>
+        <div class="card-body">
+          
+          <form method="POST" action="/director/" accept-charset="utf-8">
+            {% csrf_token %}
+            <div class="form-group">
+              <label class="col-form-label col-form-label" for="first_name">Nombre:</label>
+              <input class="form-control form-control" name="first_name" id="first_name" type="text">
+            </div>
+            <div class="form-group">
+              <label class="col-form-label col-form-label" for="last_name">Apellido:</label>
+              <input class="form-control form-control" name="last_name" id="last-name" type="text">
+            </div>
+            <div class="form-group">
+              <label class="col-form-label col-form-label" for="dni">D.N.I.:</label>
+              <input class="form-control form-control" name="dni" id="dni" type="text">
+            </div>
+            <div class="form-group">
+              <label class="col-form-label col-form-label" for="email">Email</label>
+              <input class="form-control form-control" name="email" placeholder="ejemplo@ejemplo.com" id="email" type="text">
+            </div>
+            <hr class="my-4">
+            <p class="lead">
+              <button class="btn btn-outline-primary" type="submit">CARGAR GUARDIA</button>
+            </p>
+          </form>
+
+        </div>
+      </div>
+
+    </div>
+
+    <div class="col-md-7 col-sm-12">
+      
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">Nombre</th>
+            <th scope="col">Usuario</th>
+            <th scope="col">Email</th>
+            <th scope="col">Accion</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for guard in guards %}
+            
+          <tr>
+            <th scope="row">{{ guard.user.first_name }} {{ guard.user.last_name }}</th>
+            <td>{{ guard.user.username }}</td>
+            <td>{{ guard.user.email }}</td>
+            <td><form action="/f2kens/rm_guard/" method="POST" accept-charset="utf-8">
+              {% csrf_token %}
+              <button class="btn btn-sm btn-danger" name="guard" value={{ guard.id }} type="submit">X</button>
+            </form></td>
+          </tr>
+          
+          {% endfor %}
+        </tbody>
+      </table> 
+
+    </div>
+
+  </div>
+</div>
 {% endblock content %}
