@@ -6,7 +6,7 @@
   <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
 
   <!-- import custom script -->
-  <script src="{% static 'js/functions.js' %}" type="text/javascript"></script>
+  <script src="{% static 'js/preceptor.js' %}" type="text/javascript"></script>
   <script src="{% static 'js/instascan.min.js' %}" type="text/javascript"></script>
 
 {% endblock head %}
@@ -40,7 +40,7 @@
               <div style='background-color: #eee' class="card-body">
                 <h4 class="card-title">Enviar F2</h4>
                 <!-- F2 form -->
-                <form action="{% url 'create_f2' %}" method="POST" accept-charset="utf-8">
+                <form id='f2Form' method="POST" accept-charset="utf-8">
                   {% csrf_token %}
                   <fieldset>                     
                     <!-- Year -->
@@ -56,6 +56,7 @@
                     <div class="form-group">
                       <label class="col-form-label" for="time">Hora</label>
                       <input type="time" name='time' class="form-control" id="time">
+                      <div id='errortime' class="invalid-feedback"></div>
                     </div>
                     <!-- Reason -->
                     <div class="form-group">
@@ -63,7 +64,7 @@
                       <textarea class="form-control" name="reason" id="reason" rows="3"></textarea>
                     </div>
                     <!-- Submit -->
-                    <button type="submit" class="btn btn-primary">Enviar</button>
+                    <a id='subF2' class="btn btn-primary">Enviar</a>
                   </fieldset>
                 </form>
               </div>

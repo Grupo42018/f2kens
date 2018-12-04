@@ -19,6 +19,7 @@ from oauth2_provider import models as tokensmod
 from oauth2_provider.views.mixins import OAuthLibMixin
 from oauthlib.common import generate_token
 
+from . import serializers
 from .models import *
 from .utils.apiModel import *
 from .utils import token as token_utils
@@ -31,42 +32,25 @@ def create_f2(request):
     Esta vista se usa para crear F2. Se envia
     notificacion por email al tutor del estudiante.
     '''
-    # Get preceptor by logged user
     preceptor = Preceptor.objects.get(user=request.user)
-    # Temporary solution for preventing the return of Generators
-    # Searches One ApiStudent Object filtered by dni
-    students = ApiStudent.filter(year=request.POST['year'])  # FIXME
-    time = request.POST['time'] # Get data by post
-    motive = request.POST['reason']
-    # Create the Form object
+    data = serializers.CreateF2(data=request.POST)
 
-    try:
+    if not data.is_valid():
+        return JsonResponse(data.errors, status=400)
+
+    data = data.validated_data
+
+    f2s=[]
+    for student in ApiStudent.filter(year=data['year']):
+        f2s.append(Formulario2.objects.create(
+            student=student,
+            time=data['time'],
+            preceptor=preceptor,
+            motivo=data['reason']))
         
-        for student in students:
-            new_F2 = Formulario2(student=student, time=time, preceptor=preceptor, motivo=motive)
-            new_F2.save() # Save the F2 object
-    except Exception as e:
-        return redirect('index_preceptor')
-    return redirect('index_preceptor')
+    news = serializers.F2Serializer(f2s, many=True)
 
-@login_required
-@decorators.checkGroup("Preceptors")
-def get_years(request):
-    query = None
-    if request.user.is_authenticated:
-        query = Preceptor.objects.get(user=request.user).model.year
-    else:
-        query = ApiYear.get_all()
-        
-    a=[]
-    for i in query:
-        a.append({
-            'id': i._api_id,
-            'division': i.division,
-            'year_number': i.year_number,
-            })
-    return JsonResponse(a, safe=False)
-
+    return JsonResponse(news.data, safe=False)
 
 @login_required
 @decorators.checkGroup("Tutors")
@@ -83,26 +67,6 @@ def update_f2_state(request, form2_id):
         form.save()
         return redirect('index_tutor')
     return HttpResponse(status=403)
-
-@login_required
-@decorators.checkGroup("Preceptors")
-def get_f2s(request):
-    query = Formulario2.objects.filter(preceptor__user=request.user, date=datetime.date.today(), finalized=False)
-
-    a=[]
-    for i in query:
-        a.append({
-            'id': i.id,
-            'student': {
-                "first_name": i.student.first_name, 
-                "last_name": i.student.last_name,
-                "list_number": i.student.list_number},
-            'date': i.date,
-            'time': i.time,
-            'motivo': i.motivo,
-            'state': i.state,
-            })
-    return JsonResponse(a, safe=False)
 
 @decorators.checkGroup("Tutors")
 @login_required
@@ -128,18 +92,6 @@ def get_childs_f2s(request):
             'time': i.time,
             'motivo': i.motivo,
             'state': i.state,
-            })
-    return JsonResponse(a, safe=False)
-
-def get_parents(request, pk):
-    student = ApiStudent.get(id=pk)
-    parents = Parent.filter_model(childs=student)
-    a = []
-    for i in parents:
-        a.append({
-            "first_name":i.model.first_name,
-            "last_name": i.model.last_name,
-            "id": i.id
             })
     return JsonResponse(a, safe=False)
 
@@ -230,7 +182,7 @@ def revoke_device(request):
     dev = Device.objects.get(parent__user=request.user)
     dev.parent = None
     dev.save()
-    return HttpResponse(status=205)
+    return redirect('index_tutor')
 
 @decorators.checkGroup("Directives")
 @login_required
